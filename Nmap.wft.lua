@@ -15,7 +15,7 @@ local Colors = {
     Accent = Color3.fromRGB(255, 255, 255),
     Accent2 = Color3.fromRGB(255, 80, 80),
     Text = Color3.fromRGB(30, 30, 35),
-    TextSecondary = Color3.fromRGB(140, 140, 150),
+    TextSecondary = Color3.fromRGB(0, 0, 0),  -- изменено с серого на черный
     Border = Color3.fromRGB(220, 220, 225),
     Hover = Color3.fromRGB(240, 240, 245),
     CheckboxOff = Color3.fromRGB(220, 220, 225),
@@ -88,8 +88,8 @@ VersionLabel.Position = UDim2.new(1, -95, 0.5, -7)
 VersionLabel.BackgroundColor3 = Colors.Hover
 VersionLabel.BorderSizePixel = 0
 VersionLabel.Font = Enum.Font.Gotham
-VersionLabel.Text = "v01.0"
-VersionLabel.TextColor3 = Colors.TextSecondary
+VersionLabel.Text = "v01.1"
+VersionLabel.TextColor3 = Colors.TextSecondary  -- теперь черный
 VersionLabel.TextSize = 7
 VersionLabel.ZIndex = 4
 VersionLabel.Parent = TopBar
@@ -263,7 +263,7 @@ KeySubtitle.Position = UDim2.new(0, 20, 0, 95)
 KeySubtitle.BackgroundTransparency = 1
 KeySubtitle.Font = Enum.Font.Gotham
 KeySubtitle.Text = "Enter your key to continue"
-KeySubtitle.TextColor3 = Colors.TextSecondary
+KeySubtitle.TextColor3 = Colors.TextSecondary  -- теперь черный
 KeySubtitle.TextSize = 8
 KeySubtitle.TextXAlignment = Enum.TextXAlignment.Center
 KeySubtitle.ZIndex = 4
@@ -279,7 +279,7 @@ KeyInput.BorderSizePixel = 1
 KeyInput.BorderColor3 = Colors.Border
 KeyInput.Font = Enum.Font.Gotham
 KeyInput.PlaceholderText = "Enter key"
-KeyInput.PlaceholderColor3 = Colors.TextSecondary
+KeyInput.PlaceholderColor3 = Colors.TextSecondary  -- теперь черный
 KeyInput.Text = ""
 KeyInput.TextColor3 = Colors.Text
 KeyInput.TextSize = 11
@@ -300,7 +300,7 @@ KeyInput.FocusLost:Connect(function()
     TweenService:Create(KeyInput, TweenInfo.new(0.3), {BackgroundColor3 = Colors.Panel}):Play()
 end)
 
---// Кнопка APPLY (высота уменьшена до 24)
+--// Кнопка APPLY (высота уменьшена до 24) - НЕ ТРОГАТЬ
 local KeyButton = Instance.new("TextButton")
 KeyButton.Name = "KeyButton"
 KeyButton.Size = UDim2.new(0, 220, 0, 24)
@@ -310,7 +310,7 @@ KeyButton.BorderSizePixel = 1
 KeyButton.BorderColor3 = Colors.Accent2
 KeyButton.Font = Enum.Font.GothamBold
 KeyButton.Text = "APPLY"
-KeyButton.TextColor3 = Colors.Accent2
+KeyButton.TextColor3 = Colors.Accent2  -- оставляем красный
 KeyButton.TextSize = 10
 KeyButton.ZIndex = 4
 KeyButton.Active = true
@@ -325,7 +325,7 @@ KeyButton.MouseLeave:Connect(function()
     TweenService:Create(KeyButton, TweenInfo.new(0.3), {TextColor3 = Colors.Accent2}):Play()
 end)
 
---// Сообщение об ошибке
+--// Сообщение об ошибке - НЕ ТРОГАТЬ (оставляем красный)
 local KeyError = Instance.new("TextLabel")
 KeyError.Name = "KeyError"
 KeyError.Size = UDim2.new(1, -40, 0, 16)
@@ -333,7 +333,7 @@ KeyError.Position = UDim2.new(0, 10, 0, 188)
 KeyError.BackgroundTransparency = 1
 KeyError.Font = Enum.Font.GothamBold
 KeyError.Text = ""
-KeyError.TextColor3 = Colors.Accent2
+KeyError.TextColor3 = Colors.Accent2  -- оставляем красный для "Wrong key!"
 KeyError.TextSize = 9
 KeyError.TextXAlignment = Enum.TextXAlignment.Center
 KeyError.ZIndex = 4
@@ -345,7 +345,7 @@ local function ShowKeyError(message)
     KeyError.Text = message
     KeyError.Visible = true
     KeyError.TextTransparency = 0
-    KeyError.TextColor3 = Colors.Accent2
+    KeyError.TextColor3 = Colors.Accent2  -- оставляем красный
     
     KeyError.Position = UDim2.new(0, 10, 0, 190)
     TweenService:Create(KeyError, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), 
@@ -463,7 +463,7 @@ local function CreateTab(name, layoutOrder)
     TabLabel.BackgroundTransparency = 1
     TabLabel.Font = Enum.Font.GothamBold
     TabLabel.Text = name
-    TabLabel.TextColor3 = Colors.TextSecondary
+    TabLabel.TextColor3 = Colors.TextSecondary  -- теперь черный
     TabLabel.TextSize = 6
     TabLabel.AutoLocalize = false
     TabLabel.ZIndex = 5
@@ -529,9 +529,9 @@ local function SwitchTab(tabName)
     TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
     TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
     
-    MiscTabLabel.TextColor3 = Colors.TextSecondary
-    TeleportTabLabel.TextColor3 = Colors.TextSecondary
-    SettingsTabLabel.TextColor3 = Colors.TextSecondary
+    MiscTabLabel.TextColor3 = Colors.TextSecondary  -- теперь черный
+    TeleportTabLabel.TextColor3 = Colors.TextSecondary  -- теперь черный
+    SettingsTabLabel.TextColor3 = Colors.TextSecondary  -- теперь черный
     
     if tabName == "Misc" then
         MiscTabContent.Visible = true
@@ -591,7 +591,7 @@ local function CreateFunctionInTab(parent, name, description, layoutOrder, callb
     FunctionDescription.BackgroundTransparency = 1
     FunctionDescription.Font = Enum.Font.Gotham
     FunctionDescription.Text = description
-    FunctionDescription.TextColor3 = Colors.TextSecondary
+    FunctionDescription.TextColor3 = Colors.TextSecondary  -- теперь черный
     FunctionDescription.TextSize = 5
     FunctionDescription.TextXAlignment = Enum.TextXAlignment.Left
     FunctionDescription.TextWrapped = true
@@ -1369,7 +1369,7 @@ DescriptionText.Position = UDim2.new(0, 10, 0, 21)
 DescriptionText.BackgroundTransparency = 1
 DescriptionText.Font = Enum.Font.Gotham
 DescriptionText.Text = "This is a beta version and may contain bugs"
-DescriptionText.TextColor3 = Colors.TextSecondary
+DescriptionText.TextColor3 = Colors.TextSecondary  -- теперь черный
 DescriptionText.TextSize = 7
 DescriptionText.TextXAlignment = Enum.TextXAlignment.Left
 DescriptionText.TextWrapped = true
@@ -1446,9 +1446,9 @@ local function CheckKey()
         SwitchTab("Misc")
         ShowNotification("Welcome!")
     else
-        ShowKeyError("Wrong key!")
+        ShowKeyError("Wrong key!")  -- текст ошибки остается красным
         KeyInput.Text = ""
-        ShowNotification("Wrong key!")
+        ShowNotification("Wrong key!")  -- уведомление тоже содержит "Wrong key!", но мы не трогаем текст уведомления, он черный (Colors.Text)
     end
 end
 
