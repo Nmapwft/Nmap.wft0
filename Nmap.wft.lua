@@ -8,7 +8,7 @@ local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
---// Цвета (белая тема)
+--// Цвета (белая тема) - тень белая
 local Colors = {
     Background = Color3.fromRGB(250, 250, 252),
     Panel = Color3.fromRGB(255, 255, 255),
@@ -20,7 +20,7 @@ local Colors = {
     Hover = Color3.fromRGB(240, 240, 245),
     CheckboxOff = Color3.fromRGB(220, 220, 225),
     CheckboxOn = Color3.fromRGB(255, 80, 80),
-    Shadow = Color3.fromRGB(200, 200, 210)
+    Shadow = Color3.fromRGB(255, 255, 255) -- белая тень
 }
 
 --// Основной контейнер
@@ -43,13 +43,13 @@ MainFrame.Active = true
 MainFrame.ZIndex = 99
 MainFrame.Parent = ScreenGui
 
---// Белая тень
+--// Белая тень с прозрачностью 0.25
 local Shadow = Instance.new("Frame")
 Shadow.Name = "Shadow"
 Shadow.Size = UDim2.new(1, 18, 1, 18)
 Shadow.Position = UDim2.new(0, -9, 0, -9)
 Shadow.BackgroundColor3 = Colors.Shadow
-Shadow.BackgroundTransparency = 0.25
+Shadow.BackgroundTransparency = 0.25   -- как вы просили
 Shadow.BorderSizePixel = 0
 Shadow.ZIndex = 0
 Shadow.Parent = MainFrame
@@ -136,14 +136,13 @@ MinimizeButton.MouseLeave:Connect(function()
     TweenService:Create(MinimizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
 end)
 
---// Прямоугольник для открытия меню (ПЛАВАЮЩАЯ КНОПКА)
+--// Прямоугольник для открытия меню (ПЛАВАЮЩАЯ КНОПКА - БЕЗ ТЕНИ И ОБВОДКИ)
 local MinimizedButton = Instance.new("TextButton")
 MinimizedButton.Name = "MinimizedButton"
 MinimizedButton.Size = UDim2.new(0, 70, 0, 22)
-MinimizedButton.Position = UDim2.new(1, -75, 0, 35) -- Правая сторона
+MinimizedButton.Position = UDim2.new(1, -75, 0, 35)
 MinimizedButton.BackgroundColor3 = Colors.Panel
-MinimizedButton.BorderSizePixel = 1
-MinimizedButton.BorderColor3 = Colors.Border
+MinimizedButton.BorderSizePixel = 0
 MinimizedButton.Font = Enum.Font.GothamBold
 MinimizedButton.Text = ""
 MinimizedButton.ZIndex = 99
@@ -151,7 +150,7 @@ MinimizedButton.Visible = false
 MinimizedButton.Active = true
 MinimizedButton.Parent = ScreenGui
 
---// Буква N (слева)
+--// Буква N (слева) - БЕЗ ТЕНИ
 local MinimizedText = Instance.new("TextLabel")
 MinimizedText.Name = "MinimizedText"
 MinimizedText.Size = UDim2.new(0, 18, 1, 0)
@@ -161,6 +160,7 @@ MinimizedText.Font = Enum.Font.GothamBold
 MinimizedText.Text = "N"
 MinimizedText.TextColor3 = Colors.Text
 MinimizedText.TextSize = 11
+MinimizedText.TextTransparency = 0
 MinimizedText.ZIndex = 101
 MinimizedText.Parent = MinimizedButton
 
@@ -738,7 +738,8 @@ function DrawArrow(plr)
                         Arrow.Visible = true
                     else
                         Arrow.Visible = false
-                    end                else
+                    end
+                else
                     Arrow.Visible = false
                 end
             else
