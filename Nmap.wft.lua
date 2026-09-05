@@ -136,11 +136,11 @@ MinimizeButton.MouseLeave:Connect(function()
     TweenService:Create(MinimizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
 end)
 
---// Прямоугольник для открытия меню
+--// Прямоугольник для открытия меню (ПЛАВАЮЩАЯ КНОПКА)
 local MinimizedButton = Instance.new("TextButton")
 MinimizedButton.Name = "MinimizedButton"
 MinimizedButton.Size = UDim2.new(0, 70, 0, 22)
-MinimizedButton.Position = UDim2.new(1, -75, 0, 35)
+MinimizedButton.Position = UDim2.new(1, -75, 0, 35) -- Правая сторона
 MinimizedButton.BackgroundColor3 = Colors.Panel
 MinimizedButton.BorderSizePixel = 1
 MinimizedButton.BorderColor3 = Colors.Border
@@ -173,6 +173,47 @@ MinimizedRedLine.BackgroundColor3 = Colors.Accent2
 MinimizedRedLine.BorderSizePixel = 0
 MinimizedRedLine.ZIndex = 102
 MinimizedRedLine.Parent = MinimizedButton
+
+--// Переменные для перетаскивания плавающей кнопки
+local draggingMin = false
+local dragStartPosMin = nil
+local frameStartPosMin = nil
+local dragConnectionMin = nil
+
+--// Перетаскивание плавающей кнопки
+local function StartDragMinimized(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingMin = true
+        dragStartPosMin = input.Position
+        frameStartPosMin = MinimizedButton.Position
+        if dragConnectionMin then dragConnectionMin:Disconnect() end
+        dragConnectionMin = UserInputService.InputChanged:Connect(function(changeInput)
+            if draggingMin and (changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch) then
+                local delta = changeInput.Position - dragStartPosMin
+                MinimizedButton.Position = UDim2.new(
+                    frameStartPosMin.X.Scale, 
+                    frameStartPosMin.X.Offset + delta.X,
+                    frameStartPosMin.Y.Scale, 
+                    frameStartPosMin.Y.Offset + delta.Y
+                )
+            end
+        end)
+    end
+end
+
+local function EndDragMinimized(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingMin = false
+        if dragConnectionMin then 
+            dragConnectionMin:Disconnect()
+            dragConnectionMin = nil
+        end
+    end
+end
+
+--// Навешиваем обработчики на плавающую кнопку
+MinimizedButton.InputBegan:Connect(StartDragMinimized)
+MinimizedButton.InputEnded:Connect(EndDragMinimized)
 
 MinimizedButton.MouseEnter:Connect(function()
     TweenService:Create(MinimizedButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
@@ -231,7 +272,7 @@ KeySubtitle.Parent = KeyScreen
 --// Поле ввода ключа (высота уменьшена до 24)
 local KeyInput = Instance.new("TextBox")
 KeyInput.Name = "KeyInput"
-KeyInput.Size = UDim2.new(0, 220, 0, 24)   -- Изменено
+KeyInput.Size = UDim2.new(0, 220, 0, 24)
 KeyInput.Position = UDim2.new(0.5, -110, 0, 115)
 KeyInput.BackgroundColor3 = Colors.Panel
 KeyInput.BorderSizePixel = 1
@@ -262,7 +303,7 @@ end)
 --// Кнопка APPLY (высота уменьшена до 24)
 local KeyButton = Instance.new("TextButton")
 KeyButton.Name = "KeyButton"
-KeyButton.Size = UDim2.new(0, 220, 0, 24)  -- Изменено
+KeyButton.Size = UDim2.new(0, 220, 0, 24)
 KeyButton.Position = UDim2.new(0.5, -110, 0, 152)
 KeyButton.BackgroundColor3 = Colors.Panel
 KeyButton.BorderSizePixel = 1
@@ -306,12 +347,10 @@ local function ShowKeyError(message)
     KeyError.TextTransparency = 0
     KeyError.TextColor3 = Colors.Accent2
     
-    -- Анимация появления ошибки
     KeyError.Position = UDim2.new(0, 10, 0, 190)
     TweenService:Create(KeyError, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), 
         {Position = UDim2.new(0, 10, 0, 188)}):Play()
     
-    -- Мигание ошибки
     wait(0.3)
     TweenService:Create(KeyError, TweenInfo.new(0.2), {TextTransparency = 0.5}):Play()
     wait(0.2)
@@ -405,69 +444,69 @@ end
 
 --// Создание вкладок (с AutoLocalize = false)
 local function CreateTab(name, layoutOrder)
-	local TabButton = Instance.new("TextButton")
-	TabButton.Name = name .. "Tab"
-	TabButton.Size = UDim2.new(1, -8, 0, 17)
-	TabButton.Position = UDim2.new(0, 4, 0, 4 + (layoutOrder - 1) * 20)
-	TabButton.BackgroundColor3 = Colors.Hover
-	TabButton.BorderSizePixel = 0
-	TabButton.Font = Enum.Font.GothamBold
-	TabButton.Text = ""
-	TabButton.AutoLocalize = false
-	TabButton.ZIndex = 4
-	TabButton.Active = true
-	TabButton.Parent = TabPanel
-	
-	local TabLabel = Instance.new("TextLabel")
-	TabLabel.Name = "Label"
-	TabLabel.Size = UDim2.new(1, 0, 1, 0)
-	TabLabel.BackgroundTransparency = 1
-	TabLabel.Font = Enum.Font.GothamBold
-	TabLabel.Text = name
-	TabLabel.TextColor3 = Colors.TextSecondary
-	TabLabel.TextSize = 6
-	TabLabel.AutoLocalize = false
-	TabLabel.ZIndex = 5
-	TabLabel.Parent = TabButton
-	
-	TabButton.MouseEnter:Connect(function()
-		if TabLabel.TextColor3 ~= Colors.Text then
-			TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(235, 235, 240)}):Play()
-		end
-	end)
-	TabButton.MouseLeave:Connect(function()
-		if TabLabel.TextColor3 ~= Colors.Text then
-			TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-		end
-	end)
-	
-	return TabButton, TabLabel
+    local TabButton = Instance.new("TextButton")
+    TabButton.Name = name .. "Tab"
+    TabButton.Size = UDim2.new(1, -8, 0, 17)
+    TabButton.Position = UDim2.new(0, 4, 0, 4 + (layoutOrder - 1) * 20)
+    TabButton.BackgroundColor3 = Colors.Hover
+    TabButton.BorderSizePixel = 0
+    TabButton.Font = Enum.Font.GothamBold
+    TabButton.Text = ""
+    TabButton.AutoLocalize = false
+    TabButton.ZIndex = 4
+    TabButton.Active = true
+    TabButton.Parent = TabPanel
+    
+    local TabLabel = Instance.new("TextLabel")
+    TabLabel.Name = "Label"
+    TabLabel.Size = UDim2.new(1, 0, 1, 0)
+    TabLabel.BackgroundTransparency = 1
+    TabLabel.Font = Enum.Font.GothamBold
+    TabLabel.Text = name
+    TabLabel.TextColor3 = Colors.TextSecondary
+    TabLabel.TextSize = 6
+    TabLabel.AutoLocalize = false
+    TabLabel.ZIndex = 5
+    TabLabel.Parent = TabButton
+    
+    TabButton.MouseEnter:Connect(function()
+        if TabLabel.TextColor3 ~= Colors.Text then
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(235, 235, 240)}):Play()
+        end
+    end)
+    TabButton.MouseLeave:Connect(function()
+        if TabLabel.TextColor3 ~= Colors.Text then
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+        end
+    end)
+    
+    return TabButton, TabLabel
 end
 
 local function CreateTabContent(name)
-	local Content = Instance.new("ScrollingFrame")
-	Content.Name = name .. "Content"
-	Content.Size = UDim2.new(1, 0, 1, 0)
-	Content.Position = UDim2.new(0, 0, 0, 0)
-	Content.BackgroundTransparency = 1
-	Content.BorderSizePixel = 0
-	Content.ScrollBarThickness = 2
-	Content.ScrollBarImageColor3 = Colors.Border
-	Content.CanvasSize = UDim2.new(0, 0, 0, 0)
-	Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
-	Content.ZIndex = 3
-	Content.Active = true
-	Content.Visible = false
-	Content.Parent = ContentContainer
-	
-	local UIListLayout = Instance.new("UIListLayout")
-	UIListLayout.Name = "FunctionList"
-	UIListLayout.Padding = UDim.new(0, 4)
-	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Parent = Content
-	
-	return Content
+    local Content = Instance.new("ScrollingFrame")
+    Content.Name = name .. "Content"
+    Content.Size = UDim2.new(1, 0, 1, 0)
+    Content.Position = UDim2.new(0, 0, 0, 0)
+    Content.BackgroundTransparency = 1
+    Content.BorderSizePixel = 0
+    Content.ScrollBarThickness = 2
+    Content.ScrollBarImageColor3 = Colors.Border
+    Content.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Content.ZIndex = 3
+    Content.Active = true
+    Content.Visible = false
+    Content.Parent = ContentContainer
+    
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Name = "FunctionList"
+    UIListLayout.Padding = UDim.new(0, 4)
+    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = Content
+    
+    return Content
 end
 
 --// Создаем вкладки (Teleport на втором месте)
@@ -482,31 +521,31 @@ local SettingsTabContent = CreateTabContent("Settings")
 
 --// Функция переключения вкладок
 local function SwitchTab(tabName)
-	MiscTabContent.Visible = false
-	TeleportTabContent.Visible = false
-	SettingsTabContent.Visible = false
-	
-	TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-	TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-	TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-	
-	MiscTabLabel.TextColor3 = Colors.TextSecondary
-	TeleportTabLabel.TextColor3 = Colors.TextSecondary
-	SettingsTabLabel.TextColor3 = Colors.TextSecondary
-	
-	if tabName == "Misc" then
-		MiscTabContent.Visible = true
-		TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-		MiscTabLabel.TextColor3 = Colors.Text
-	elseif tabName == "Exploit" then
-		TeleportTabContent.Visible = true
-		TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-		TeleportTabLabel.TextColor3 = Colors.Text
-	elseif tabName == "Settings" then
-		SettingsTabContent.Visible = true
-		TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-		SettingsTabLabel.TextColor3 = Colors.Text
-	end
+    MiscTabContent.Visible = false
+    TeleportTabContent.Visible = false
+    SettingsTabContent.Visible = false
+    
+    TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+    TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+    TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+    
+    MiscTabLabel.TextColor3 = Colors.TextSecondary
+    TeleportTabLabel.TextColor3 = Colors.TextSecondary
+    SettingsTabLabel.TextColor3 = Colors.TextSecondary
+    
+    if tabName == "Misc" then
+        MiscTabContent.Visible = true
+        TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
+        MiscTabLabel.TextColor3 = Colors.Text
+    elseif tabName == "Exploit" then
+        TeleportTabContent.Visible = true
+        TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
+        TeleportTabLabel.TextColor3 = Colors.Text
+    elseif tabName == "Settings" then
+        SettingsTabContent.Visible = true
+        TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
+        SettingsTabLabel.TextColor3 = Colors.Text
+    end
 end
 
 MiscTabButton.MouseButton1Click:Connect(function() SwitchTab("Misc") end)
@@ -515,121 +554,121 @@ SettingsTabButton.MouseButton1Click:Connect(function() SwitchTab("Settings") end
 
 --// Функция создания элемента функции (уменьшена)
 local function CreateFunctionInTab(parent, name, description, layoutOrder, callback)
-	local FunctionFrame = Instance.new("Frame")
-	FunctionFrame.Name = name .. "_Frame"
-	FunctionFrame.Size = UDim2.new(1, -8, 0, 38)
-	FunctionFrame.BackgroundColor3 = Colors.Panel
-	FunctionFrame.BorderSizePixel = 0
-	FunctionFrame.LayoutOrder = layoutOrder
-	FunctionFrame.ZIndex = 3
-	FunctionFrame.Active = true
-	FunctionFrame.Parent = parent
-	
-	local AccentBar = Instance.new("Frame")
-	AccentBar.Size = UDim2.new(0, 3, 1, 0)
-	AccentBar.BackgroundColor3 = Colors.Accent2
-	AccentBar.BorderSizePixel = 0
-	AccentBar.ZIndex = 4
-	AccentBar.Parent = FunctionFrame
+    local FunctionFrame = Instance.new("Frame")
+    FunctionFrame.Name = name .. "_Frame"
+    FunctionFrame.Size = UDim2.new(1, -8, 0, 38)
+    FunctionFrame.BackgroundColor3 = Colors.Panel
+    FunctionFrame.BorderSizePixel = 0
+    FunctionFrame.LayoutOrder = layoutOrder
+    FunctionFrame.ZIndex = 3
+    FunctionFrame.Active = true
+    FunctionFrame.Parent = parent
+    
+    local AccentBar = Instance.new("Frame")
+    AccentBar.Size = UDim2.new(0, 3, 1, 0)
+    AccentBar.BackgroundColor3 = Colors.Accent2
+    AccentBar.BorderSizePixel = 0
+    AccentBar.ZIndex = 4
+    AccentBar.Parent = FunctionFrame
 
-	local FunctionName = Instance.new("TextLabel")
-	FunctionName.Name = "FunctionName"
-	FunctionName.Size = UDim2.new(1, -45, 0, 13)
-	FunctionName.Position = UDim2.new(0, 10, 0, 4)
-	FunctionName.BackgroundTransparency = 1
-	FunctionName.Font = Enum.Font.GothamBold
-	FunctionName.Text = name
-	FunctionName.TextColor3 = Colors.Text
-	FunctionName.TextSize = 9
-	FunctionName.TextXAlignment = Enum.TextXAlignment.Left
-	FunctionName.ZIndex = 5
-	FunctionName.Parent = FunctionFrame
+    local FunctionName = Instance.new("TextLabel")
+    FunctionName.Name = "FunctionName"
+    FunctionName.Size = UDim2.new(1, -45, 0, 13)
+    FunctionName.Position = UDim2.new(0, 10, 0, 4)
+    FunctionName.BackgroundTransparency = 1
+    FunctionName.Font = Enum.Font.GothamBold
+    FunctionName.Text = name
+    FunctionName.TextColor3 = Colors.Text
+    FunctionName.TextSize = 9
+    FunctionName.TextXAlignment = Enum.TextXAlignment.Left
+    FunctionName.ZIndex = 5
+    FunctionName.Parent = FunctionFrame
 
-	local FunctionDescription = Instance.new("TextLabel")
-	FunctionDescription.Name = "Description"
-	FunctionDescription.Size = UDim2.new(1, -45, 0, 9)
-	FunctionDescription.Position = UDim2.new(0, 10, 0, 19)
-	FunctionDescription.BackgroundTransparency = 1
-	FunctionDescription.Font = Enum.Font.Gotham
-	FunctionDescription.Text = description
-	FunctionDescription.TextColor3 = Colors.TextSecondary
-	FunctionDescription.TextSize = 5
-	FunctionDescription.TextXAlignment = Enum.TextXAlignment.Left
-	FunctionDescription.TextWrapped = true
-	FunctionDescription.ZIndex = 5
-	FunctionDescription.Parent = FunctionFrame
+    local FunctionDescription = Instance.new("TextLabel")
+    FunctionDescription.Name = "Description"
+    FunctionDescription.Size = UDim2.new(1, -45, 0, 9)
+    FunctionDescription.Position = UDim2.new(0, 10, 0, 19)
+    FunctionDescription.BackgroundTransparency = 1
+    FunctionDescription.Font = Enum.Font.Gotham
+    FunctionDescription.Text = description
+    FunctionDescription.TextColor3 = Colors.TextSecondary
+    FunctionDescription.TextSize = 5
+    FunctionDescription.TextXAlignment = Enum.TextXAlignment.Left
+    FunctionDescription.TextWrapped = true
+    FunctionDescription.ZIndex = 5
+    FunctionDescription.Parent = FunctionFrame
 
-	local Checkbox = Instance.new("Frame")
-	Checkbox.Name = "Checkbox"
-	Checkbox.Size = UDim2.new(0, 14, 0, 14)
-	Checkbox.Position = UDim2.new(1, -21, 0, 12)
-	Checkbox.BackgroundColor3 = Colors.CheckboxOff
-	Checkbox.BorderSizePixel = 0
-	Checkbox.ZIndex = 6
-	Checkbox.Parent = FunctionFrame
+    local Checkbox = Instance.new("Frame")
+    Checkbox.Name = "Checkbox"
+    Checkbox.Size = UDim2.new(0, 14, 0, 14)
+    Checkbox.Position = UDim2.new(1, -21, 0, 12)
+    Checkbox.BackgroundColor3 = Colors.CheckboxOff
+    Checkbox.BorderSizePixel = 0
+    Checkbox.ZIndex = 6
+    Checkbox.Parent = FunctionFrame
 
-	local MainButton = Instance.new("TextButton")
-	MainButton.Name = "MainButton"
-	MainButton.Size = UDim2.new(1, 0, 1, 0)
-	MainButton.Position = UDim2.new(0, 0, 0, 0)
-	MainButton.BackgroundTransparency = 1
-	MainButton.BorderSizePixel = 0
-	MainButton.Text = ""
-	MainButton.ZIndex = 7
-	MainButton.Active = true
-	MainButton.Parent = FunctionFrame
+    local MainButton = Instance.new("TextButton")
+    MainButton.Name = "MainButton"
+    MainButton.Size = UDim2.new(1, 0, 1, 0)
+    MainButton.Position = UDim2.new(0, 0, 0, 0)
+    MainButton.BackgroundTransparency = 1
+    MainButton.BorderSizePixel = 0
+    MainButton.Text = ""
+    MainButton.ZIndex = 7
+    MainButton.Active = true
+    MainButton.Parent = FunctionFrame
 
-	local isToggled = false
-	local function UpdateToggle()
-		if isToggled then
-			TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOn}):Play()
-		else
-			TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOff}):Play()
-		end
-	end
+    local isToggled = false
+    local function UpdateToggle()
+        if isToggled then
+            TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOn}):Play()
+        else
+            TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOff}):Play()
+        end
+    end
 
-	MainButton.MouseButton1Click:Connect(function()
-		isToggled = not isToggled
-		UpdateToggle()
-		if callback then
-			callback(isToggled)
-		end
-		if isToggled then
-			ShowNotification(name .. " enabled")
-		end
-	end)
-	
-	MainButton.MouseEnter:Connect(function()
-		TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(252, 252, 252)}):Play()
-	end)
-	MainButton.MouseLeave:Connect(function()
-		TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-	end)
+    MainButton.MouseButton1Click:Connect(function()
+        isToggled = not isToggled
+        UpdateToggle()
+        if callback then
+            callback(isToggled)
+        end
+        if isToggled then
+            ShowNotification(name .. " enabled")
+        end
+    end)
+    
+    MainButton.MouseEnter:Connect(function()
+        TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(252, 252, 252)}):Play()
+    end)
+    MainButton.MouseLeave:Connect(function()
+        TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
+    end)
 
-	return {
-		Frame = FunctionFrame,
-		Checkbox = Checkbox,
-		MainButton = MainButton,
-		IsToggled = function() return isToggled end,
-		SetToggled = function(value)
-			isToggled = value
-			UpdateToggle()
-			if callback then
-				callback(isToggled)
-			end
-		end
-	}
+    return {
+        Frame = FunctionFrame,
+        Checkbox = Checkbox,
+        MainButton = MainButton,
+        IsToggled = function() return isToggled end,
+        SetToggled = function(value)
+            isToggled = value
+            UpdateToggle()
+            if callback then
+                callback(isToggled)
+            end
+        end
+    }
 end
 
 --// Функция проверки врага
 local function IsEnemy(targetPlayer)
-	local localPlayer = Players.LocalPlayer
-	if targetPlayer.Team and localPlayer.Team then
-		return targetPlayer.Team ~= localPlayer.Team
-	end
-	if not localPlayer.Team then return true end
-	if not targetPlayer.Team then return true end
-	return false
+    local localPlayer = Players.LocalPlayer
+    if targetPlayer.Team and localPlayer.Team then
+        return targetPlayer.Team ~= localPlayer.Team
+    end
+    if not localPlayer.Team then return true end
+    if not targetPlayer.Team then return true end
+    return false
 end
 
 --// Arrows функция
@@ -638,89 +677,88 @@ local ArrowsEnabled = true
 local ArrowDistance = 40
 
 local function RemoveAllArrows()
-	for playerName, arrowData in pairs(ArrowObjects) do
-		if arrowData.Arrow then arrowData.Arrow:Remove() end
-		if arrowData.Connection then arrowData.Connection:Disconnect() end
-		ArrowObjects[playerName] = nil
-	end
+    for playerName, arrowData in pairs(ArrowObjects) do
+        if arrowData.Arrow then arrowData.Arrow:Remove() end
+        if arrowData.Connection then arrowData.Connection:Disconnect() end
+        ArrowObjects[playerName] = nil
+    end
 end
 
 local function ArrowsFunction(enabled)
-	ArrowsEnabled = enabled
-	if enabled then
-		for _, v in pairs(Players:GetPlayers()) do
-			if v ~= player and IsEnemy(v) and not ArrowObjects[v.Name] then
-				DrawArrow(v)
-			end
-		end
-		Players.PlayerAdded:Connect(function(newPlayer)
-			if newPlayer ~= player and IsEnemy(newPlayer) and not ArrowObjects[newPlayer.Name] then
-				wait(1)
-				DrawArrow(newPlayer)
-			end
-		end)
-	else
-		RemoveAllArrows()
-	end
+    ArrowsEnabled = enabled
+    if enabled then
+        for _, v in pairs(Players:GetPlayers()) do
+            if v ~= player and IsEnemy(v) and not ArrowObjects[v.Name] then
+                DrawArrow(v)
+            end
+        end
+        Players.PlayerAdded:Connect(function(newPlayer)
+            if newPlayer ~= player and IsEnemy(newPlayer) and not ArrowObjects[newPlayer.Name] then
+                wait(1)
+                DrawArrow(newPlayer)
+            end
+        end)
+    else
+        RemoveAllArrows()
+    end
 end
 
 function DrawArrow(plr)
-	if not IsEnemy(plr) then return end
-	
-	local Arrow = Drawing.new("Triangle")
-	Arrow.Visible = false
-	Arrow.Color = Color3.fromRGB(255, 255, 255)
-	Arrow.Thickness = 1
-	Arrow.Transparency = 1
-	Arrow.Filled = false
-	
-	local connection
-	connection = game:GetService("RunService").RenderStepped:Connect(function()
-		if ArrowObjects[plr.Name] then
-			if plr.Character ~= nil and plr.Character:FindFirstChildOfClass("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-				local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
-				local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-				
-				if ArrowsEnabled and not vis then
-					local direction = Vector2.new(pos.X - screenCenter.X, pos.Y - screenCenter.Y)
-					if direction.Magnitude > 0 then
-						direction = direction.Unit
-						local arrowPos = screenCenter + direction * ArrowDistance
-						
-						local angle = math.atan2(direction.Y, direction.X)
-						local arrowSize = 6.7
-						local p1 = arrowPos + Vector2.new(math.cos(angle) * arrowSize, math.sin(angle) * arrowSize)
-						local p2 = arrowPos + Vector2.new(math.cos(angle + 2.5) * arrowSize, math.sin(angle + 2.5) * arrowSize)
-						local p3 = arrowPos + Vector2.new(math.cos(angle - 2.5) * arrowSize, math.sin(angle - 2.5) * arrowSize)
-						
-						Arrow.PointA = p1
-						Arrow.PointB = p2
-						Arrow.PointC = p3
-						Arrow.Visible = true
-					else
-						Arrow.Visible = false
-					end
-				else
-					Arrow.Visible = false
-				end
-			else
-				Arrow.Visible = false
-				if game.Players:FindFirstChild(plr.Name) == nil then
-					connection:Disconnect()
-					Arrow:Remove()
-					ArrowObjects[plr.Name] = nil
-				end
-			end
-		else
-			Arrow:Remove()
-			connection:Disconnect()
-		end
-	end)
-	
-	ArrowObjects[plr.Name] = {
-		Arrow = Arrow,
-		Connection = connection
-	}
+    if not IsEnemy(plr) then return end
+    
+    local Arrow = Drawing.new("Triangle")
+    Arrow.Visible = false
+    Arrow.Color = Color3.fromRGB(255, 255, 255)
+    Arrow.Thickness = 1
+    Arrow.Transparency = 1
+    Arrow.Filled = false
+    
+    local connection
+    connection = game:GetService("RunService").RenderStepped:Connect(function()
+        if ArrowObjects[plr.Name] then
+            if plr.Character ~= nil and plr.Character:FindFirstChildOfClass("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+                local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                
+                if ArrowsEnabled and not vis then
+                    local direction = Vector2.new(pos.X - screenCenter.X, pos.Y - screenCenter.Y)
+                    if direction.Magnitude > 0 then
+                        direction = direction.Unit
+                        local arrowPos = screenCenter + direction * ArrowDistance
+                        
+                        local angle = math.atan2(direction.Y, direction.X)
+                        local arrowSize = 6.7
+                        local p1 = arrowPos + Vector2.new(math.cos(angle) * arrowSize, math.sin(angle) * arrowSize)
+                        local p2 = arrowPos + Vector2.new(math.cos(angle + 2.5) * arrowSize, math.sin(angle + 2.5) * arrowSize)
+                        local p3 = arrowPos + Vector2.new(math.cos(angle - 2.5) * arrowSize, math.sin(angle - 2.5) * arrowSize)
+                        
+                        Arrow.PointA = p1
+                        Arrow.PointB = p2
+                        Arrow.PointC = p3
+                        Arrow.Visible = true
+                    else
+                        Arrow.Visible = false
+                    end                else
+                    Arrow.Visible = false
+                end
+            else
+                Arrow.Visible = false
+                if game.Players:FindFirstChild(plr.Name) == nil then
+                    connection:Disconnect()
+                    Arrow:Remove()
+                    ArrowObjects[plr.Name] = nil
+                end
+            end
+        else
+            Arrow:Remove()
+            connection:Disconnect()
+        end
+    end)
+    
+    ArrowObjects[plr.Name] = {
+        Arrow = Arrow,
+        Connection = connection
+    }
 end
 
 --// Переменные настроек ESP
@@ -986,7 +1024,6 @@ end
 --// Создаем кнопку для Exploit (Spawn Locations) - LayoutOrder 1
 local TeleportFunction = CreateFunctionInTab(TeleportTabContent, "Spawn Locations", "Teleport to spawns", 1, function(enabled)
     if enabled then
-        -- Телепортируем на спавн
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local spawnLocation = player.RespawnLocation
             
@@ -994,7 +1031,6 @@ local TeleportFunction = CreateFunctionInTab(TeleportTabContent, "Spawn Location
                 player.Character.HumanoidRootPart.CFrame = spawnLocation.CFrame
                 ShowNotification("Teleport you")
             else
-                -- Если не нашли RespawnLocation, ищем SpawnLocation в Workspace
                 local spawns = {}
                 for _, obj in pairs(Workspace:GetDescendants()) do
                     if obj:IsA("SpawnLocation") then
@@ -1041,14 +1077,12 @@ local isTeleportPlayersOpen = false
 TeleportPlayersToggle.MouseButton1Click:Connect(function()
     isTeleportPlayersOpen = not isTeleportPlayersOpen
     if isTeleportPlayersOpen then
-        -- Очищаем старые кнопки
         for _, child in pairs(TeleportPlayersFrame:GetChildren()) do
             if child:IsA("TextButton") then
                 child:Destroy()
             end
         end
         
-        -- Создаем кнопки для каждого игрока
         local yPos = 4
         for _, targetPlayer in pairs(Players:GetPlayers()) do
             if targetPlayer ~= player then
@@ -1056,7 +1090,7 @@ TeleportPlayersToggle.MouseButton1Click:Connect(function()
                 PlayerButton.Name = targetPlayer.Name .. "_Button"
                 PlayerButton.Size = UDim2.new(1, -16, 0, 27)
                 PlayerButton.Position = UDim2.new(0, 8, 0, yPos)
-                PlayerButton.BackgroundColor3 = Colors.Panel -- Белый цвет
+                PlayerButton.BackgroundColor3 = Colors.Panel
                 PlayerButton.BorderSizePixel = 0
                 PlayerButton.Font = Enum.Font.Gotham
                 PlayerButton.Text = targetPlayer.Name
@@ -1065,7 +1099,6 @@ TeleportPlayersToggle.MouseButton1Click:Connect(function()
                 PlayerButton.ZIndex = 4
                 PlayerButton.Parent = TeleportPlayersFrame
                 
-                -- Красная полоска слева
                 local PlayerAccentBar = Instance.new("Frame")
                 PlayerAccentBar.Size = UDim2.new(0, 3, 1, 0)
                 PlayerAccentBar.BackgroundColor3 = Colors.Accent2
@@ -1081,7 +1114,6 @@ TeleportPlayersToggle.MouseButton1Click:Connect(function()
                 end)
                 
                 PlayerButton.MouseButton1Click:Connect(function()
-                    -- Телепортация к игроку
                     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                         if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                             player.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
@@ -1098,7 +1130,6 @@ TeleportPlayersToggle.MouseButton1Click:Connect(function()
             end
         end
         
-        -- Устанавливаем высоту фрейма
         local totalHeight = math.max(yPos + 4, 35)
         TweenService:Create(TeleportPlayersFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), 
             {Size = UDim2.new(1, -8, 0, totalHeight)}):Play()
@@ -1181,32 +1212,32 @@ end
 ArrowSliderToggle.MouseButton1Click:Connect(ToggleSlider)
 
 SliderBar.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		local function UpdateSlider()
-			local mousePos = UserInputService:GetMouseLocation()
-			local sliderPos = SliderBar.AbsolutePosition
-			local sliderSize = SliderBar.AbsoluteSize
-			local relativeX = math.clamp((mousePos.X - sliderPos.X) / sliderSize.X, 0, 1)
-			ArrowDistance = math.floor(relativeX * 150) + 20
-			SliderFill.Size = UDim2.new(ArrowDistance / 200, 0, 1, 0)
-			ArrowDistanceTitle.Text = "Arrow Distance: " .. ArrowDistance
-		end
-		
-		UpdateSlider()
-		
-		local connection
-		connection = UserInputService.InputChanged:Connect(function(changeInput)
-			if changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch then
-				UpdateSlider()
-			end
-		end)
-		
-		UserInputService.InputEnded:Connect(function(endInput)
-			if endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch then
-				connection:Disconnect()
-			end
-		end)
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        local function UpdateSlider()
+            local mousePos = UserInputService:GetMouseLocation()
+            local sliderPos = SliderBar.AbsolutePosition
+            local sliderSize = SliderBar.AbsoluteSize
+            local relativeX = math.clamp((mousePos.X - sliderPos.X) / sliderSize.X, 0, 1)
+            ArrowDistance = math.floor(relativeX * 150) + 20
+            SliderFill.Size = UDim2.new(ArrowDistance / 200, 0, 1, 0)
+            ArrowDistanceTitle.Text = "Arrow Distance: " .. ArrowDistance
+        end
+        
+        UpdateSlider()
+        
+        local connection
+        connection = UserInputService.InputChanged:Connect(function(changeInput)
+            if changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch then
+                UpdateSlider()
+            end
+        end)
+        
+        UserInputService.InputEnded:Connect(function(endInput)
+            if endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch then
+                connection:Disconnect()
+            end
+        end)
+    end
 end)
 
 --// Выдвижная кнопка для Tracer
@@ -1344,7 +1375,7 @@ DescriptionText.TextWrapped = true
 DescriptionText.ZIndex = 5
 DescriptionText.Parent = DescriptionFrame
 
---// Telegram в настройках
+--// Telegram в настройках (изменено: фон кнопки теперь белый)
 local TelegramFrame = Instance.new("Frame")
 TelegramFrame.Name = "TelegramFrame"
 TelegramFrame.Size = UDim2.new(1, -8, 0, 36)
@@ -1365,7 +1396,7 @@ local TelegramButton = Instance.new("TextButton")
 TelegramButton.Name = "TelegramButton"
 TelegramButton.Size = UDim2.new(1, -16, 1, -6)
 TelegramButton.Position = UDim2.new(0, 8, 0, 3)
-TelegramButton.BackgroundColor3 = Colors.Hover
+TelegramButton.BackgroundColor3 = Colors.Panel
 TelegramButton.BorderSizePixel = 0
 TelegramButton.Font = Enum.Font.GothamBold
 TelegramButton.Text = "Telegram: @Nmap_011"
@@ -1378,41 +1409,51 @@ TelegramButton.MouseEnter:Connect(function()
     TweenService:Create(TelegramButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(235, 235, 240)}):Play()
 end)
 TelegramButton.MouseLeave:Connect(function()
-    TweenService:Create(TelegramButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+    TweenService:Create(TelegramButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
 end)
 
 TelegramButton.MouseButton1Click:Connect(function()
-	if setclipboard then setclipboard("https://t.me/Nmap_011") end
-	ShowNotification("Link copied")
+    if setclipboard then setclipboard("https://t.me/Nmap_011") end
+    ShowNotification("Link copied")
 end)
+
+--// Функция сворачивания и разворачивания меню
+local function HideMenu()
+    MainFrame.Visible = false
+    MinimizedButton.Visible = true
+end
+
+local function ShowMenu()
+    MainFrame.Visible = true
+    MinimizedButton.Visible = false
+end
 
 --// Функция полного выключения и закрытия
 local function DestroyGUI()
-	RemoveAllArrows()
-	RemoveAllESP()
-	RemoveAllTracers()
-	
-	ScreenGui:Destroy()
+    RemoveAllArrows()
+    RemoveAllESP()
+    RemoveAllTracers()
+    ScreenGui:Destroy()
 end
 
 --// Обработка ключа
 local function CheckKey()
-	if KeyInput.Text == "Nmap_key" then
-		KeyScreen.Visible = false
-		TabPanel.Visible = true
-		ContentContainer.Visible = true
-		SwitchTab("Misc")
-		ShowNotification("Welcome!")
-	else
-		ShowKeyError("Wrong key!")
-		KeyInput.Text = ""
-		ShowNotification("Wrong key!")
-	end
+    if KeyInput.Text == "Nmap_key" then
+        KeyScreen.Visible = false
+        TabPanel.Visible = true
+        ContentContainer.Visible = true
+        SwitchTab("Misc")
+        ShowNotification("Welcome!")
+    else
+        ShowKeyError("Wrong key!")
+        KeyInput.Text = ""
+        ShowNotification("Wrong key!")
+    end
 end
 
 KeyButton.MouseButton1Click:Connect(CheckKey)
 KeyInput.FocusLost:Connect(function(enterPressed)
-	if enterPressed then CheckKey() end
+    if enterPressed then CheckKey() end
 end)
 
 --// Перетаскивание главного окна
@@ -1422,40 +1463,33 @@ local frameStartPos = nil
 local dragConnection = nil
 
 local function StartDrag(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStartPos = input.Position
-		frameStartPos = MainFrame.Position
-		if dragConnection then dragConnection:Disconnect() end
-		dragConnection = UserInputService.InputChanged:Connect(function(changeInput)
-			if dragging and (changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch) then
-				local delta = changeInput.Position - dragStartPos
-				MainFrame.Position = UDim2.new(frameStartPos.X.Scale, frameStartPos.X.Offset + delta.X, frameStartPos.Y.Scale, frameStartPos.Y.Offset + delta.Y)
-			end
-		end)
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStartPos = input.Position
+        frameStartPos = MainFrame.Position
+        if dragConnection then dragConnection:Disconnect() end
+        dragConnection = UserInputService.InputChanged:Connect(function(changeInput)
+            if dragging and (changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch) then
+                local delta = changeInput.Position - dragStartPos
+                MainFrame.Position = UDim2.new(frameStartPos.X.Scale, frameStartPos.X.Offset + delta.X, 
+                                               frameStartPos.Y.Scale, frameStartPos.Y.Offset + delta.Y)
+            end
+        end)
+    end
 end
 
 local function EndDrag(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-		if dragConnection then dragConnection:Disconnect(); dragConnection = nil end
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+        if dragConnection then 
+            dragConnection:Disconnect()
+            dragConnection = nil
+        end
+    end
 end
 
 TopBar.InputBegan:Connect(StartDrag)
 TopBar.InputEnded:Connect(EndDrag)
-
---// Функция полного выключения и закрытия
-local function HideMenu()
-	MainFrame.Visible = false
-	MinimizedButton.Visible = true
-end
-
-local function ShowMenu()
-	MainFrame.Visible = true
-	MinimizedButton.Visible = false
-end
 
 --// Красная кнопка полностью выключает все и закрывает меню
 CloseButton.MouseButton1Click:Connect(DestroyGUI)
@@ -1463,9 +1497,13 @@ MinimizeButton.MouseButton1Click:Connect(HideMenu)
 MinimizedButton.MouseButton1Click:Connect(ShowMenu)
 
 UserInputService.InputBegan:Connect(function(input)
-	if input.KeyCode == Enum.KeyCode.Insert then
-		if MainFrame.Visible then HideMenu() else ShowMenu() end
-	end
+    if input.KeyCode == Enum.KeyCode.Insert then
+        if MainFrame.Visible then 
+            HideMenu() 
+        else 
+            ShowMenu() 
+        end
+    end
 end)
 
 --// Инициализация
