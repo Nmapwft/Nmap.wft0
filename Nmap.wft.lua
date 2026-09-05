@@ -80,12 +80,12 @@ Title.TextYAlignment = Enum.TextYAlignment.Center
 Title.ZIndex = 4
 Title.Parent = TopBar
 
---// Версия
+--// Версия (убрали серый фон)
 local VersionLabel = Instance.new("TextLabel")
 VersionLabel.Name = "VersionLabel"
 VersionLabel.Size = UDim2.new(0, 40, 0, 14)
 VersionLabel.Position = UDim2.new(1, -95, 0.5, -7)
-VersionLabel.BackgroundColor3 = Colors.Hover
+VersionLabel.BackgroundTransparency = 1   -- <-- УБРАЛИ СЕРЫЙ ФОН
 VersionLabel.BorderSizePixel = 0
 VersionLabel.Font = Enum.Font.Gotham
 VersionLabel.Text = "v01.1"
