@@ -709,7 +709,7 @@ function DrawArrow(plr)
     local Arrow = Drawing.new("Triangle")
     Arrow.Visible = false
     Arrow.Color = Color3.fromRGB(255, 255, 255)
-    Arrow.Thickness = 1
+    Arrow.Thickness = 1  -- возвращена толщина 1
     Arrow.Transparency = 1
     Arrow.Filled = false
     
@@ -727,7 +727,7 @@ function DrawArrow(plr)
                         local arrowPos = screenCenter + direction * ArrowDistance
                         
                         local angle = math.atan2(direction.Y, direction.X)
-                        local arrowSize = 6.7
+                        local arrowSize = 6.4  -- размер 6.4
                         local p1 = arrowPos + Vector2.new(math.cos(angle) * arrowSize, math.sin(angle) * arrowSize)
                         local p2 = arrowPos + Vector2.new(math.cos(angle + 2.5) * arrowSize, math.sin(angle + 2.5) * arrowSize)
                         local p3 = arrowPos + Vector2.new(math.cos(angle - 2.5) * arrowSize, math.sin(angle - 2.5) * arrowSize)
