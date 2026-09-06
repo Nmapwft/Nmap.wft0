@@ -1056,7 +1056,7 @@ end)
 local TeleportPlayersToggle = Instance.new("TextButton")
 TeleportPlayersToggle.Name = "TeleportPlayersToggle"
 TeleportPlayersToggle.Size = UDim2.new(1, -8, 0, 23)
-TeleportPlayersToggle.BackgroundColor3 = Colors.Hover
+TeleportPlayersToggle.BackgroundColor3 = Colors.Panel -- ИЗМЕНЕНО: был Color3.fromRGB(245, 245, 245), теперь чисто белый
 TeleportPlayersToggle.BorderSizePixel = 0
 TeleportPlayersToggle.LayoutOrder = 2
 TeleportPlayersToggle.ZIndex = 3
@@ -1144,7 +1144,7 @@ end)
 local ArrowSliderToggle = Instance.new("TextButton")
 ArrowSliderToggle.Name = "ArrowSliderToggle"
 ArrowSliderToggle.Size = UDim2.new(1, -8, 0, 23)
-ArrowSliderToggle.BackgroundColor3 = Colors.Hover
+ArrowSliderToggle.BackgroundColor3 = Colors.Panel -- ИЗМЕНЕНО: был Color3.fromRGB(245, 245, 245), теперь чисто белый
 ArrowSliderToggle.BorderSizePixel = 0
 ArrowSliderToggle.LayoutOrder = 2
 ArrowSliderToggle.ZIndex = 3
@@ -1245,7 +1245,7 @@ end)
 local TracerToggle = Instance.new("TextButton")
 TracerToggle.Name = "TracerToggle"
 TracerToggle.Size = UDim2.new(1, -8, 0, 23)
-TracerToggle.BackgroundColor3 = Colors.Hover
+TracerToggle.BackgroundColor3 = Colors.Panel -- ИЗМЕНЕНО: был Color3.fromRGB(245, 245, 245), теперь чисто белый
 TracerToggle.BorderSizePixel = 0
 TracerToggle.LayoutOrder = 5
 TracerToggle.ZIndex = 3
