@@ -1,1623 +1,545 @@
---// Nmap Menu - White Edition (Mobile Fixed) with Arrows Only
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local Workspace = game:GetService("Workspace")
-
-local player = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
---// Цвета (белая тема) - тень белая
-local Colors = {
-    Background = Color3.fromRGB(250, 250, 252),
-    Panel = Color3.fromRGB(255, 255, 255),
-    Accent = Color3.fromRGB(255, 255, 255),
-    Accent2 = Color3.fromRGB(255, 80, 80),
-    Text = Color3.fromRGB(30, 30, 35),
-    TextSecondary = Color3.fromRGB(0, 0, 0),
-    Border = Color3.fromRGB(220, 220, 225),
-    Hover = Color3.fromRGB(240, 240, 245),
-    CheckboxOff = Color3.fromRGB(220, 220, 225),
-    CheckboxOn = Color3.fromRGB(255, 80, 80),
-    Shadow = Color3.fromRGB(255, 255, 255)
-}
-
---// Основной контейнер
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "NmapMenu"
-ScreenGui.Parent = player:WaitForChild("PlayerGui")
-ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
---// Главное окно
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 380, 0, 235)
-MainFrame.Position = UDim2.new(0.5, -190, 0.5, -117)
-MainFrame.BackgroundColor3 = Colors.Background
-MainFrame.BorderSizePixel = 0
-MainFrame.ClipsDescendants = false
-MainFrame.Active = true
-MainFrame.ZIndex = 99
-MainFrame.Parent = ScreenGui
-
---// Белая тень
-local Shadow = Instance.new("Frame")
-Shadow.Name = "Shadow"
-Shadow.Size = UDim2.new(1, 18, 1, 18)
-Shadow.Position = UDim2.new(0, -9, 0, -9)
-Shadow.BackgroundColor3 = Colors.Shadow
-Shadow.BackgroundTransparency = 0.25
-Shadow.BorderSizePixel = 0
-Shadow.ZIndex = 0
-Shadow.Parent = MainFrame
-
---// Верхняя панель
-local TopBar = Instance.new("Frame")
-TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 29)
-TopBar.Position = UDim2.new(0, 0, 0, 0)
-TopBar.BackgroundColor3 = Colors.Panel
-TopBar.BorderSizePixel = 0
-TopBar.ZIndex = 3
-TopBar.Active = true
-TopBar.Parent = MainFrame
-
---// Заголовок
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Size = UDim2.new(1, -80, 1, 0)
-Title.Position = UDim2.new(0, 13, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Font = Enum.Font.GothamBlack
-Title.Text = "Nmap.wft"
-Title.TextColor3 = Colors.Text
-Title.TextSize = 13
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.TextYAlignment = Enum.TextYAlignment.Center
-Title.ZIndex = 4
-Title.AutoLocalize = false
-Title.Parent = TopBar
-
---// Версия
-local VersionLabel = Instance.new("TextLabel")
-VersionLabel.Name = "VersionLabel"
-VersionLabel.Size = UDim2.new(0, 40, 0, 14)
-VersionLabel.Position = UDim2.new(1, -95, 0.5, -7)
-VersionLabel.BackgroundTransparency = 1
-VersionLabel.BorderSizePixel = 0
-VersionLabel.Font = Enum.Font.Gotham
-VersionLabel.Text = "v01.1"
-VersionLabel.TextColor3 = Colors.TextSecondary
-VersionLabel.TextSize = 7
-VersionLabel.ZIndex = 4
-VersionLabel.AutoLocalize = false
-VersionLabel.Parent = TopBar
-
---// Кнопка закрытия
-local CloseButton = Instance.new("TextButton")
-CloseButton.Name = "CloseButton"
-CloseButton.Size = UDim2.new(0, 20, 0, 20)
-CloseButton.Position = UDim2.new(1, -23, 0, 4)
-CloseButton.BackgroundColor3 = Colors.Accent2
-CloseButton.BorderSizePixel = 0
-CloseButton.Font = Enum.Font.GothamBold
-CloseButton.Text = "—"
-CloseButton.TextColor3 = Colors.Text
-CloseButton.TextSize = 10
-CloseButton.ZIndex = 5
-CloseButton.AutoLocalize = false
-CloseButton.Parent = TopBar
-
---// Кнопка сворачивания
-local MinimizeButton = Instance.new("TextButton")
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Size = UDim2.new(0, 20, 0, 20)
-MinimizeButton.Position = UDim2.new(1, -47, 0, 4)
-MinimizeButton.BackgroundColor3 = Colors.Hover
-MinimizeButton.BorderSizePixel = 0
-MinimizeButton.Font = Enum.Font.GothamBold
-MinimizeButton.Text = "—"
-MinimizeButton.TextColor3 = Colors.Text
-MinimizeButton.TextSize = 10
-MinimizeButton.ZIndex = 5
-MinimizeButton.AutoLocalize = false
-MinimizeButton.Parent = TopBar
-
-CloseButton.MouseEnter:Connect(function()
-    TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 100, 100)}):Play()
+local _0x1908 =string.char(104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,73,109,73,110,115,97,110,101,45,49,51,51,55,47,110,101,118,101,114,108,111,115,101,45,117,105,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,115,111,117,114,99,101,47,108,105,98,114,97,114,121,46,108,117,97)local _0xB09D = game:HttpGet(_0x1908)
+_0xB09D = _0xB09D:gsub(string.char(83,99,97,108,101,37,115,42,61,37,115,42,48,37,46,91,54,55,93,37,100,42),string.char(83,99,97,108,101,32,61,32,48,46,51,56,53))
+local _0x5CFF = loadstring(_0xB09D)()
+local _0x9731 = game:GetService(string.char(80,108,97,121,101,114,115))
+local _0x1EA2 = game:GetService(string.char(82,117,110,83,101,114,118,105,99,101))
+local _0x4285 = game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))
+local _0x2C5A = game:GetService(string.char(87,111,114,107,115,112,97,99,101))
+local _0xA2BE = _0x9731.LocalPlayer
+local _0x9B7F = _0x2C5A.CurrentCamera_0x5CFF.LogsEnabled = true
+function _0x5CFF:Log(Text, Level)
+if not self.LogsEnabled then return end
+local _0x86A3 = ({string.char(91,73,78,70,79,93),string.char(91,87,65,82,78,93),string.char(91,69,82,82,79,82,93)})[Level or 1] orstring.char(91,76,79,71,93)print(_0x86A3, Text)
+end_0x5CFF.Theme.Accent = Color3.fromRGB(255, 255, 255)
+_0x5CFF.Theme.AccentGradient = Color3.fromRGB(255, 255, 255)local function _0xB1D7(plr)
+if plr == _0xA2BE then return false end
+if plr.Team and _0xA2BE.Team then
+if plr.Team ~= _0xA2BE.Team then return true end
+end
+if plr.TeamColor and _0xA2BE.TeamColor then
+if plr.TeamColor ~= _0xA2BE.TeamColor then return true end
+end
+if not plr.Team and not _0xA2BE.Team
+and not plr.TeamColor and not _0xA2BE.TeamColor then
+return true
+end
+return false
+endlocal _0xD066 = _0x5CFF:Window({
+Name =string.char(80,114,111,106,101,99,116,32,78,109,97,112),
+SubName =string.char(77,111,98,105,108,101,32,66,117,105,108,100),
+Logo =string.char(49,48,55,49,52,54,54,50,52,54,57,57,49,55,56)})local _0x8909 = 0.385
+local _0x86DC =string.char(114,98,120,97,115,115,101,116,105,100,58,47,47,49,50,49,55,54,48,54,54,54,53,50,53,54,54,48)local _0x1B43 =string.char(114,98,120,97,115,115,101,116,105,100,58,47,47,49,49,55,55,56,54,57,56,51,50,55,49,52,52,50)local function _0x3839()
+local _0xD4C2 = { _0x5CFF.Holder, _0x5CFF.UnusedHolder }
+for _, _0x893C in ipairs(_0xD4C2) do
+if _0x893C and _0x893C.Instance and _0x893C.Instance.Parent then
+for _, obj in ipairs(_0x893C.Instance:GetDescendants()) do
+if obj:IsA(string.char(85,73,83,99,97,108,101)) and obj.Scale ~= _0x8909 then
+obj.Scale = _0x8909
+end
+if obj:IsA(string.char(70,114,97,109,101)) and not obj:FindFirstChild(string.char(78,111,118,97,83,101,116,116,105,110,103,115,83,99,97,108,101)) then
+local _0x930A, _0x6605 = obj.Size.X.Offset, obj.Size.Y.Offset
+if (_0x930A == 325 and _0x6605 == 230) or (_0x930A == 245 and _0x6605 == 159) then
+local _0xED8D = Instance.new(string.char(85,73,83,99,97,108,101))
+_0xED8D.Name =string.char(78,111,118,97,83,101,116,116,105,110,103,115,83,99,97,108,101)_0xED8D.Scale = _0x8909
+_0xED8D.Parent = obj
+end
+end
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) and not obj:FindFirstChild(string.char(78,111,118,97,67,80,83,99,97,108,101)) then
+local _0x930A, _0x6605 = obj.Size.X.Offset, obj.Size.Y.Offset
+if _0x930A == 235 and _0x6605 == 270 then
+local _0xED8D = Instance.new(string.char(85,73,83,99,97,108,101))
+_0xED8D.Name =string.char(78,111,118,97,67,80,83,99,97,108,101)_0xED8D.Scale = _0x8909
+_0xED8D.Parent = obj
+end
+end
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) and not obj:FindFirstChild(string.char(78,111,118,97,79,112,116,105,111,110,83,99,97,108,101)) then
+local _0x9DC6 = obj:FindFirstChildOfClass(string.char(85,73,83,116,114,111,107,101))
+local _0x7DA6 = obj:FindFirstChildOfClass(string.char(83,99,114,111,108,108,105,110,103,70,114,97,109,101))
+if _0x9DC6 and _0x7DA6 and _0x9DC6.ApplyStrokeMode == Enum.ApplyStrokeMode.Border then
+local _0xED8D = Instance.new(string.char(85,73,83,99,97,108,101))
+_0xED8D.Name =string.char(78,111,118,97,79,112,116,105,111,110,83,99,97,108,101)_0xED8D.Scale = _0x8909
+_0xED8D.Parent = obj
+end
+end
+if obj:IsA(string.char(83,99,114,111,108,108,105,110,103,70,114,97,109,101)) and obj:FindFirstChildOfClass(string.char(85,73,71,114,105,100,76,97,121,111,117,116)) then
+local _0x1016 = obj.Parent
+if _0x1016 and _0x1016:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) then
+local _0x6820, _0xD63F = _0x1016.Size.X.Offset, _0x1016.Size.Y.Offset
+if _0x6820 == 235 and _0xD63F == 270 then
+obj:Destroy()
+end
+end
+end
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110))
+and obj.Size.X.Scale == 0 and obj.Size.X.Offset == 26
+and obj.Size.Y.Scale == 0 and obj.Size.Y.Offset == 16 then
+obj.Visible = false
+end
+if obj:IsA(string.char(73,109,97,103,101,76,97,98,101,108)) and obj.Image == _0x86DC then
+obj.Visible = false
+end
+if obj:IsA(string.char(73,109,97,103,101,76,97,98,101,108)) and obj.Image == _0x1B43 then
+obj.Visible = false
+end
+end
+end
+end
+end
+_0x3839()
+_0x1EA2.RenderStepped:Connect(_0x3839)local _0x69F4 =string.char(114,98,120,97,115,115,101,116,105,100,58,47,47,49,51,48,53,49,48,52,57,50,55,48,54,56,57,50)local _0x4ECB =string.char(114,98,120,97,115,115,101,116,105,100,58,47,47,49,50,50,54,54,57,56,50,56,53,57,51,49,54,48)local function _0xB453()
+local _0x04C1, _0x5DFF = nil, 0
+for _, obj in ipairs(_0x5CFF.Holder.Instance:GetChildren()) do
+if obj:IsA(string.char(70,114,97,109,101)) then
+local _0x0B58 = obj.AbsoluteSize.X * obj.AbsoluteSize.Y
+if _0x0B58 > _0x5DFF then
+_0x04C1, _0x5DFF = obj, _0x0B58
+end
+end
+end
+return _0x04C1
+end
+local function _0xC80D(btn)
+if not btn:GetAttribute(string.char(78,111,118,97,72,105,100,100,101,110)) then
+btn:SetAttribute(string.char(78,111,118,97,72,105,100,100,101,110), true)
+btn.Visible = false
+end
+for _, child in ipairs(btn:GetChildren()) do
+if child:IsA(string.char(73,109,97,103,101,76,97,98,101,108)) then
+child.Visible = false
+end
+end
+btn.Size = UDim2.new(0, 118, 0, 16)
+local _0x5B95 = _0xB453()
+if _0x5B95 then
+btn.BackgroundTransparency = _0x5B95.BackgroundTransparency
+else
+btn.BackgroundTransparency = 0.12
+end
+btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+local _0xAB3C = btn:FindFirstChildOfClass(string.char(85,73,67,111,114,110,101,114))
+if _0xAB3C then
+_0xAB3C.CornerRadius = UDim.new(0, 0)
+end
+local _0xD45D = btn:FindFirstChild(string.char(78,111,118,97,80,105,112,101))
+if not _0xD45D then
+_0xD45D = Instance.new(string.char(84,101,120,116,76,97,98,101,108))
+_0xD45D.Name =string.char(78,111,118,97,80,105,112,101)_0xD45D.BackgroundTransparency = 1
+_0xD45D.Text =string.char(124)_0xD45D.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0xD45D.Font = Enum.Font.GothamBold
+_0xD45D.TextXAlignment = Enum.TextXAlignment.Center
+_0xD45D.TextYAlignment = Enum.TextYAlignment.Center
+_0xD45D.ZIndex = 128
+_0xD45D.Parent = btn
+end
+_0xD45D.Size = UDim2.new(0, 8, 1, 0)
+_0xD45D.Position = UDim2.new(0, 3, 0, 0)
+_0xD45D.TextSize = 11
+local _0xAAE9 = btn:FindFirstChild(string.char(78,111,118,97,76,105,110,107))
+if not _0xAAE9 then
+_0xAAE9 = Instance.new(string.char(84,101,120,116,76,97,98,101,108))
+_0xAAE9.Name =string.char(78,111,118,97,76,105,110,107)_0xAAE9.BackgroundTransparency = 1
+_0xAAE9.Text =string.char(104,116,116,112,115,58,47,47,116,46,109,101,47,78,109,97,112,95,48,49,49)_0xAAE9.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0xAAE9.Font = Enum.Font.GothamBold
+_0xAAE9.TextXAlignment = Enum.TextXAlignment.Left
+_0xAAE9.TextYAlignment = Enum.TextYAlignment.Center
+_0xAAE9.ZIndex = 128
+_0xAAE9.Parent = btn
+end
+_0xAAE9.Size = UDim2.new(1, -12, 1, 0)
+_0xAAE9.Position = UDim2.new(0, 11, 0, 0)
+_0xAAE9.TextSize = 8
+if not btn:GetAttribute(string.char(78,111,118,97,80,111,115,105,116,105,111,110,101,100)) then
+btn:SetAttribute(string.char(78,111,118,97,80,111,115,105,116,105,111,110,101,100), true)
+task.spawn(function()
+local _0xD2CC
+for _ = 1, 50 do
+_0xD2CC = _0xB453()
+if _0xD2CC and _0xD2CC.AbsoluteSize.X > 100 then
+break
+end
+task.wait(0.02)
+end
+if _0xD2CC then
+local _0x4A6C = _0xD2CC.AbsolutePosition.X + _0xD2CC.AbsoluteSize.X
+local _0x6AD1 = _0xD2CC.AbsolutePosition.Y
+btn.AnchorPoint = Vector2.new(0, 0)
+btn.Position = UDim2.new(0, _0x4A6C + 3, 0, _0x6AD1)
+task.wait()
+end
+btn.Visible = true
 end)
-CloseButton.MouseLeave:Connect(function()
-    TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Accent2}):Play()
+end
+end
+local function _0x8845()
+local _0xD4C2 = { _0x5CFF.Holder, _0x5CFF.UnusedHolder }
+for _, _0x893C in ipairs(_0xD4C2) do
+if _0x893C and _0x893C.Instance and _0x893C.Instance.Parent then
+for _, obj in ipairs(_0x893C.Instance:GetDescendants()) do
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) and (obj.Text ==string.char(43)or obj.Text ==string.char(45)) then
+obj:Destroy()
+end
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) then
+local _0xAB3C = obj:FindFirstChildOfClass(string.char(85,73,67,111,114,110,101,114))
+local _0x15C9 = obj:FindFirstChildOfClass(string.char(73,109,97,103,101,76,97,98,101,108))
+if _0xAB3C and _0x15C9
+and (_0xAB3C.CornerRadius.Scale == 1
+or obj:FindFirstChild(string.char(78,111,118,97,76,105,110,107))) then
+_0xC80D(obj)
+end
+end
+if obj:IsA(string.char(73,109,97,103,101,76,97,98,101,108)) then
+if obj.Image == _0x69F4 then
+obj.Visible = false
+if not obj.Parent:FindFirstChild(string.char(78,111,118,97,67,108,111,115,101,68,97,115,104)) then
+local _0xF12F = Instance.new(string.char(84,101,120,116,76,97,98,101,108))
+_0xF12F.Name =string.char(78,111,118,97,67,108,111,115,101,68,97,115,104)_0xF12F.Size = UDim2.new(1, 0, 1, 0)
+_0xF12F.BackgroundTransparency = 1
+_0xF12F.Text =string.char(226,128,148)_0xF12F.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0xF12F.TextSize = 16
+_0xF12F.Font = Enum.Font.GothamBold
+_0xF12F.TextXAlignment = Enum.TextXAlignment.Center
+_0xF12F.TextYAlignment = Enum.TextYAlignment.Center
+_0xF12F.ZIndex = obj.ZIndex + 1
+_0xF12F.Parent = obj.Parent
+end
+end
+if obj.Image == _0x4ECB then
+obj.ImageColor3 = Color3.fromRGB(255, 255, 255)
+obj.ImageTransparency = 0
+end
+end
+end
+end
+end
+end
+task.spawn(function()
+while _0x5CFF.Holder and _0x5CFF.Holder.Instance and _0x5CFF.Holder.Instance.Parent do
+pcall(_0x8845)
+task.wait(0.5)
+end
+end)local _0x899D = false
+local _0xA540 = Color3.fromRGB(255, 255, 255)
+local _0x55AE = 3
+local _0x8DEC = 0.35
+local _0xCB17 = 90
+local _0x8A07 =string.char(72,101,97,100)local _0x9744 = Enum.KeyCode.E
+local _0x8DC6 =string.char(72,111,108,100)local _0xA893 = false
+local _0xA73C = false
+local _0x3F89 = Drawing.new(string.char(67,105,114,99,108,101))
+_0x3F89.Visible = false
+_0x3F89.Thickness = 1
+_0x3F89.NumSides = 48
+_0x3F89.Filled = false
+_0x3F89.Transparency = 1
+local function _0x814F(_0xC430)
+if not _0xC430 or not _0xC430.Parent then return false end
+local _0xD85C = _0xC430.Parent
+local _0xCC6E = RaycastParams.new()
+_0xCC6E.FilterType = Enum.RaycastFilterType.Exclude
+local _0x19B1 = { _0x9B7F }
+if _0xA2BE.Character then table.insert(_0x19B1, _0xA2BE.Character) end
+_0xCC6E.FilterDescendantsInstances = _0x19B1
+local _0x8764 = _0x9B7F.CFrame.Position
+local _0xE3CE = _0xC430.Position - _0x8764
+local _0x9CE0 = _0x2C5A:Raycast(_0x8764, _0xE3CE, _0xCC6E)
+if _0x9CE0 then
+return _0x9CE0.Instance:IsDescendantOf(_0xD85C)
+end
+return true
+end
+local function _0xDBD8()
+local _0x04C1, _0xD836 = nil, _0xCB17
+local _0x5C55 = Vector2.new(_0x9B7F.ViewportSize.X / 2, _0x9B7F.ViewportSize.Y / 2)
+for _, plr in ipairs(_0x9731:GetPlayers()) do
+if _0xB1D7(plr) then
+local _0xD85C = plr.Character
+if _0xD85C then
+local _0x2C4A = _0xD85C:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))
+if _0x2C4A and _0x2C4A.Health > 0 then
+local _0xE487 = _0xD85C:FindFirstChild(_0x8A07) or _0xD85C:FindFirstChild(string.char(72,101,97,100))
+if _0xE487 then
+local _0x9102, _0x4CB1 = _0x9B7F:WorldToViewportPoint(_0xE487.Position)
+if _0x4CB1 then
+local _0xFA8C = (Vector2.new(_0x9102.X, _0x9102.Y) - _0x5C55).Magnitude
+if _0xFA8C < _0xD836 and _0x814F(_0xE487) then
+_0xD836 = _0xFA8C
+_0x04C1 = _0xE487
+end
+end
+end
+end
+end
+end
+end
+return _0x04C1
+end
+_0x4285.InputBegan:Connect(function(input, gpe)
+if gpe then return end
+if input.KeyCode == _0x9744 or input.UserInputType == _0x9744 then
+if _0x8DC6 ==string.char(72,111,108,100)then _0xA893 = true
+elseif _0x8DC6 ==string.char(84,111,103,103,108,101)then _0xA73C = not _0xA73C end
+end
 end)
-
-MinimizeButton.MouseEnter:Connect(function()
-    TweenService:Create(MinimizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(230, 230, 235)}):Play()
+_0x4285.InputEnded:Connect(function(input)
+if input.KeyCode == _0x9744 or input.UserInputType == _0x9744 then
+if _0x8DC6 ==string.char(72,111,108,100)then _0xA893 = false end
+end
 end)
-MinimizeButton.MouseLeave:Connect(function()
-    TweenService:Create(MinimizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+_0x1EA2.RenderStepped:Connect(function()
+if not _0x899D then _0x3F89.Visible = false; return end
+_0x3F89.Color = _0xA540
+_0x3F89.Radius = _0x55AE
+_0x3F89.Position = Vector2.new(_0x9B7F.ViewportSize.X / 2, _0x9B7F.ViewportSize.Y / 2)
+_0x3F89.Visible = true
+local _0x1421 = (_0x8DC6 ==string.char(72,111,108,100)and _0xA893)
+or (_0x8DC6 ==string.char(84,111,103,103,108,101)and _0xA73C)
+or (_0x8DC6 ==string.char(65,108,119,97,121,115))
+if _0x1421 then
+local _0xC430 = _0xDBD8()
+if _0xC430 then
+local _0xBEC6 = _0x9B7F.CFrame.Position
+_0x9B7F.CFrame = _0x9B7F.CFrame:Lerp(CFrame.new(_0xBEC6, _0xC430.Position), _0x8DEC)
+end
+end
+end)local _0x37B8 = {}
+local _0x3DB0 = {}
+local _0x1183 = false
+local _0x73BB = Color3.fromRGB(255, 255, 255)
+local _0x2FB1 = true
+local _0x30C3 = true
+local _0xBA15 = 500
+local _0x2A00 = false
+local _0xA4E7 = Color3.fromRGB(255, 255, 255)
+local _0xE85C = 0.1local function _0x2E34(plr)
+if not _0xB1D7(plr) then return nil end
+local _0xD85C = plr.Character
+if not _0xD85C then return nil end
+local _0x28C4 = _0xD85C:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))
+local _0xFD7E = _0xD85C:FindFirstChild(string.char(72,101,97,100))
+local _0x2C4A = _0xD85C:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))
+if not _0x28C4 or not _0xFD7E or not _0x2C4A or _0x2C4A.Health <= 0 then return nil end
+local _0x26B9 = (_0x9B7F.CFrame.Position - _0x28C4.Position).Magnitude
+if _0x26B9 > _0xBA15 then return nil end
+return _0xD85C, _0x28C4, _0xFD7E, _0x26B9
+end
+local function _0x7D9B(plr)
+local _0x48AE = Drawing.new(string.char(83,113,117,97,114,101))
+_0x48AE.Visible=false; _0x48AE.Color=_0x73BB; _0x48AE.Thickness=1; _0x48AE.Transparency=1; _0x48AE.Filled=false
+local _0x0C0F = Drawing.new(string.char(84,101,120,116))
+_0x0C0F.Visible=false; _0x0C0F.Color=_0x73BB; _0x0C0F.Size=13
+_0x0C0F.Center=true; _0x0C0F.Outline=true; _0x0C0F.Font=2
+local _0x40B6 = Drawing.new(string.char(84,101,120,116))
+_0x40B6.Visible=false; _0x40B6.Color=_0x73BB; _0x40B6.Size=12
+_0x40B6.Center=true; _0x40B6.Outline=true; _0x40B6.Font=2
+local _0x0AE3 = _0x1EA2.RenderStepped:Connect(function()
+if not _0x1183 or not _0x37B8[plr.Name] then
+_0x48AE.Visible=false; _0x0C0F.Visible=false; _0x40B6.Visible=false; return
+end
+local _0xD85C, _0x28C4, _0xFD7E, _0x26B9 = _0x2E34(plr)
+if not _0xD85C then _0x48AE.Visible=false;_0x0C0F.Visible=false;_0x40B6.Visible=false;return end
+local _0xC2CD, _0x4CB1 = _0x9B7F:WorldToViewportPoint(_0xFD7E.Position)
+if not _0x4CB1 then _0x48AE.Visible=false;_0x0C0F.Visible=false;_0x40B6.Visible=false;return end
+local _0x893C = (_0x9B7F:WorldToViewportPoint(_0x28C4.Position).Y - _0xC2CD.Y) * 1.6
+local _0x5DD5 = _0x893C * 0.55
+local _0xE78C = Vector2.new(_0xC2CD.X - _0x5DD5/2, _0xC2CD.Y - _0x893C*0.1)
+_0x48AE.Size=Vector2.new(_0x5DD5,_0x893C); _0x48AE.Position=_0xE78C; _0x48AE.Color=_0x73BB; _0x48AE.Visible=true
+_0x0C0F.Text=plr.Name
+_0x0C0F.Position=Vector2.new(_0xC2CD.X, _0xE78C.Y - 16)
+_0x0C0F.Color=_0x73BB; _0x0C0F.Visible=_0x2FB1
+_0x40B6.Text=math.floor(_0x26B9)..string.char(109)_0x40B6.Position=Vector2.new(_0xC2CD.X, _0xE78C.Y + _0x893C + 2)
+_0x40B6.Color=_0x73BB; _0x40B6.Visible=_0x30C3
 end)
-
---// Плавающая кнопка
-local MinimizedButton = Instance.new("TextButton")
-MinimizedButton.Name = "MinimizedButton"
-MinimizedButton.Size = UDim2.new(0, 70, 0, 22)
-MinimizedButton.Position = UDim2.new(1, -75, 0, 35)
-MinimizedButton.BackgroundColor3 = Colors.Panel
-MinimizedButton.BorderSizePixel = 0
-MinimizedButton.Font = Enum.Font.GothamBold
-MinimizedButton.Text = ""
-MinimizedButton.ZIndex = 99
-MinimizedButton.Visible = false
-MinimizedButton.Active = true
-MinimizedButton.AutoLocalize = false
-MinimizedButton.Parent = ScreenGui
-
-local MinimizedText = Instance.new("TextLabel")
-MinimizedText.Name = "MinimizedText"
-MinimizedText.Size = UDim2.new(0, 18, 1, 0)
-MinimizedText.Position = UDim2.new(0, 4, 0, 0)
-MinimizedText.BackgroundTransparency = 1
-MinimizedText.Font = Enum.Font.GothamBold
-MinimizedText.Text = "N"
-MinimizedText.TextColor3 = Colors.Text
-MinimizedText.TextSize = 11
-MinimizedText.TextTransparency = 0
-MinimizedText.ZIndex = 101
-MinimizedText.AutoLocalize = false
-MinimizedText.Parent = MinimizedButton
-
-local MinimizedRedLine = Instance.new("Frame")
-MinimizedRedLine.Name = "MinimizedRedLine"
-MinimizedRedLine.Size = UDim2.new(1, 0, 0, 2)
-MinimizedRedLine.Position = UDim2.new(0, 0, 1, -2)
-MinimizedRedLine.BackgroundColor3 = Colors.Accent2
-MinimizedRedLine.BorderSizePixel = 0
-MinimizedRedLine.ZIndex = 102
-MinimizedRedLine.Parent = MinimizedButton
-
---// Перетаскивание плавающей кнопки
-local draggingMin = false
-local dragStartPosMin = nil
-local frameStartPosMin = nil
-local dragConnectionMin = nil
-
-local function StartDragMinimized(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingMin = true
-        dragStartPosMin = input.Position
-        frameStartPosMin = MinimizedButton.Position
-        if dragConnectionMin then dragConnectionMin:Disconnect() end
-        dragConnectionMin = UserInputService.InputChanged:Connect(function(changeInput)
-            if draggingMin and (changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch) then
-                local delta = changeInput.Position - dragStartPosMin
-                MinimizedButton.Position = UDim2.new(
-                    frameStartPosMin.X.Scale,
-                    frameStartPosMin.X.Offset + delta.X,
-                    frameStartPosMin.Y.Scale,
-                    frameStartPosMin.Y.Offset + delta.Y
-                )
-            end
-        end)
-    end
+_0x37B8[plr.Name] = { _0x48AE=_0x48AE, _0x0C0F=_0x0C0F, _0x40B6=_0x40B6, Connection=_0x0AE3 }
 end
-
-local function EndDragMinimized(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingMin = false
-        if dragConnectionMin then
-            dragConnectionMin:Disconnect()
-            dragConnectionMin = nil
-        end
-    end
+local function _0xDF9F(plr)
+local _0xEA79 = Drawing.new(string.char(76,105,110,101))
+_0xEA79.Visible=false; _0xEA79.Color=_0xA4E7; _0xEA79.Thickness=_0xE85C; _0xEA79.Transparency=1
+local _0x0AE3 = _0x1EA2.RenderStepped:Connect(function()
+if not _0x2A00 or not _0x3DB0[plr.Name] then
+_0xEA79.Visible = false; return
 end
-
-MinimizedButton.InputBegan:Connect(StartDragMinimized)
-MinimizedButton.InputEnded:Connect(EndDragMinimized)
-
-MinimizedButton.MouseEnter:Connect(function()
-    TweenService:Create(MinimizedButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
+local _0xD85C, _0x28C4 = _0x2E34(plr)
+if not _0xD85C then _0xEA79.Visible = false; return end
+local _0x9102, _0x4CB1 = _0x9B7F:WorldToViewportPoint(_0x28C4.Position)
+if _0x4CB1 then
+_0xEA79.From = Vector2.new(_0x9B7F.ViewportSize.X / 2, _0x9B7F.ViewportSize.Y)
+_0xEA79.To = Vector2.new(_0x9102.X, _0x9102.Y)
+_0xEA79.Color = _0xA4E7
+_0xEA79.Thickness = _0xE85C
+_0xEA79.Visible = true
+else
+_0xEA79.Visible = false
+end
 end)
-MinimizedButton.MouseLeave:Connect(function()
-    TweenService:Create(MinimizedButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
+_0x3DB0[plr.Name] = { _0xEA79=_0xEA79, Connection=_0x0AE3 }
+end
+local function _0x237F(plr)
+local _0xFA8C = _0x37B8[plr.Name]; if not _0xFA8C then return end
+if _0xFA8C.Box then _0xFA8C.Box:Remove() end
+if _0xFA8C.NameText then _0xFA8C.NameText:Remove() end
+if _0xFA8C.DistText then _0xFA8C.DistText:Remove() end
+if _0xFA8C.Connection then _0xFA8C.Connection:Disconnect() end
+_0x37B8[plr.Name] = nil
+end
+local function _0x5F27(plr)
+local _0xFA8C = _0x3DB0[plr.Name]; if not _0xFA8C then return end
+if _0xFA8C.Line then _0xFA8C.Line:Remove() end
+if _0xFA8C.Connection then _0xFA8C.Connection:Disconnect() end
+_0x3DB0[plr.Name] = nil
+end
+local function _0x30DD()
+for name in pairs(_0x37B8) do
+local _0x20CC = _0x9731:FindFirstChild(name); if _0x20CC then _0x237F(_0x20CC) end
+end
+_0x37B8 = {}
+end
+local function _0x8660()
+for name in pairs(_0x3DB0) do
+local _0x20CC = _0x9731:FindFirstChild(name); if _0x20CC then _0x5F27(_0x20CC) end
+end
+_0x3DB0 = {}
+end
+local function _0xDAD6()
+if not _0x1183 then return end
+for _, plr in ipairs(_0x9731:GetPlayers()) do
+if _0xB1D7(plr) and not _0x37B8[plr.Name] then
+_0x7D9B(plr)
+end
+end
+end
+local function _0x4DEF()
+if not _0x2A00 then return end
+for _, plr in ipairs(_0x9731:GetPlayers()) do
+if _0xB1D7(plr) and not _0x3DB0[plr.Name] then
+_0xDF9F(plr)
+end
+end
+end
+_0x9731.PlayerAdded:Connect(function(_0x20CC)
+task.wait(1)
+if _0x1183 and _0xB1D7(_0x20CC) then _0x7D9B(_0x20CC) end
+if _0x2A00 and _0xB1D7(_0x20CC) then _0xDF9F(_0x20CC) end
 end)
-
---// Экран ввода ключа
-local KeyScreen = Instance.new("Frame")
-KeyScreen.Name = "KeyScreen"
-KeyScreen.Size = UDim2.new(1, 0, 1, -29)
-KeyScreen.Position = UDim2.new(0, 0, 0, 29)
-KeyScreen.BackgroundColor3 = Colors.Background
-KeyScreen.BorderSizePixel = 0
-KeyScreen.ZIndex = 3
-KeyScreen.Parent = MainFrame
-
-local KeyTopLine = Instance.new("Frame")
-KeyTopLine.Size = UDim2.new(1, 0, 0, 2)
-KeyTopLine.Position = UDim2.new(0, 0, 0, 0)
-KeyTopLine.BackgroundColor3 = Colors.Accent2
-KeyTopLine.BorderSizePixel = 0
-KeyTopLine.ZIndex = 4
-KeyTopLine.Parent = KeyScreen
-
-local KeyTitle = Instance.new("TextLabel")
-KeyTitle.Name = "KeyTitle"
-KeyTitle.Size = UDim2.new(1, -40, 0, 20)
-KeyTitle.Position = UDim2.new(0, -10, 0, 72)
-KeyTitle.BackgroundTransparency = 1
-KeyTitle.Font = Enum.Font.GothamBold
-KeyTitle.Text = "Enter access key"
-KeyTitle.TextColor3 = Colors.Text
-KeyTitle.TextSize = 14
-KeyTitle.TextXAlignment = Enum.TextXAlignment.Center
-KeyTitle.ZIndex = 4
-KeyTitle.AutoLocalize = false
-KeyTitle.Parent = KeyScreen
-
-local KeySubtitle = Instance.new("TextLabel")
-KeySubtitle.Name = "KeySubtitle"
-KeySubtitle.Size = UDim2.new(1, -60, 0, 14)
-KeySubtitle.Position = UDim2.new(0, 20, 0, 95)
-KeySubtitle.BackgroundTransparency = 1
-KeySubtitle.Font = Enum.Font.Gotham
-KeySubtitle.Text = "Enter your key to continue"
-KeySubtitle.TextColor3 = Colors.TextSecondary
-KeySubtitle.TextSize = 8
-KeySubtitle.TextXAlignment = Enum.TextXAlignment.Center
-KeySubtitle.ZIndex = 4
-KeySubtitle.AutoLocalize = false
-KeySubtitle.Parent = KeyScreen
-
-local KeyInput = Instance.new("TextBox")
-KeyInput.Name = "KeyInput"
-KeyInput.Size = UDim2.new(0, 220, 0, 24)
-KeyInput.Position = UDim2.new(0.5, -110, 0, 115)
-KeyInput.BackgroundColor3 = Colors.Panel
-KeyInput.BorderSizePixel = 1
-KeyInput.BorderColor3 = Colors.Border
-KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = "Enter key"
-KeyInput.PlaceholderColor3 = Colors.TextSecondary
-KeyInput.Text = ""
-KeyInput.TextColor3 = Colors.Text
-KeyInput.TextSize = 11
-KeyInput.ZIndex = 4
-KeyInput.AutoLocalize = false
-KeyInput.Parent = KeyScreen
-
-local KeyInputPadding = Instance.new("UIPadding")
-KeyInputPadding.PaddingLeft = UDim.new(0, 12)
-KeyInputPadding.PaddingRight = UDim.new(0, 12)
-KeyInputPadding.Parent = KeyInput
-
-KeyInput.Focused:Connect(function()
-    TweenService:Create(KeyInput, TweenInfo.new(0.3), {BorderColor3 = Colors.Accent2}):Play()
-    TweenService:Create(KeyInput, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+_0x9731.PlayerRemoving:Connect(function(_0x20CC)
+_0x237F(_0x20CC); _0x5F27(_0x20CC)
+end)local _0x9D9A = 16
+local _0x01B7 = nil
+local function _0xE441()
+if _0x01B7 then _0x01B7:Disconnect(); _0x01B7 = nil end
+_0x01B7 = _0x1EA2.Heartbeat:Connect(function()
+local _0x7CAC = _0xA2BE.Character; if not _0x7CAC then return end
+local _0x893C = _0x7CAC:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100)); if _0x893C then _0x893C.WalkSpeed = _0x9D9A end
 end)
-KeyInput.FocusLost:Connect(function()
-    TweenService:Create(KeyInput, TweenInfo.new(0.3), {BorderColor3 = Colors.Border}):Play()
-    TweenService:Create(KeyInput, TweenInfo.new(0.3), {BackgroundColor3 = Colors.Panel}):Play()
+endlocal _0x8295 = _0x5CFF:CreateSettingsPage(_0xD066)local _0x094E = _0xD066:Page({ Name =string.char(67,111,109,98,97,116), Icon =string.char(49,48,55,49,52,54,54,50,52,54,57,57,49,55,56)})
+local _0x539B = _0x094E:Section({ Name=string.char(69,83,80), Description=string.char(80,108,97,121,101,114,115), Side=1, EnableToggle=true })
+_0x539B:Toggle({ Name=string.char(69,110,97,98,108,101,100), Flag=string.char(69,83,80,69,110,97,98,108,101,100), Default=false,
+Callback=function(v) _0x1183=v; if v then _0xDAD6() else _0x30DD() end end })
+_0x539B:Toggle({ Name=string.char(83,104,111,119,32,78,97,109,101), Flag=string.char(69,83,80,78,97,109,101), Default=true, Callback=function(v) _0x2FB1=v end })
+_0x539B:Toggle({ Name=string.char(83,104,111,119,32,68,105,115,116,97,110,99,101), Flag=string.char(69,83,80,68,105,115,116,97,110,99,101), Default=true, Callback=function(v) _0x30C3=v end })
+_0x539B:Slider({ Name=string.char(77,97,120,32,68,105,115,116,97,110,99,101), Flag=string.char(69,83,80,77,97,120,68,105,115,116), Min=50, Max=2000, Default=500, Decimals=10, Suffix=string.char(109),
+Callback=function(v) _0xBA15=v end })
+_0x539B:Label(string.char(69,83,80,32,67,111,108,111,114)):Colorpicker({ Flag=string.char(69,83,80,67,111,108,111,114), Default=Color3.fromRGB(255,255,255),
+Callback=function(_0x7CAC) _0x73BB=_0x7CAC end })
+local _0xA828 = _0x094E:Section({ Name=string.char(84,114,97,99,101,114), Description=string.char(76,105,110,101,115,32,116,111,32,101,110,101,109,105,101,115), Side=1, EnableToggle=true })
+_0xA828:Toggle({ Name=string.char(69,110,97,98,108,101,100), Flag=string.char(84,114,97,99,101,114,69,110,97,98,108,101,100), Default=false,
+Callback=function(v) _0x2A00=v; if v then _0x4DEF() else _0x8660() end end })
+_0xA828:Slider({ Name=string.char(84,104,105,99,107,110,101,115,115), Flag=string.char(84,114,97,99,101,114,84,104,105,99,107), Min=0.1, Max=5, Default=0.1, Decimals=0.1,
+Callback=function(v) _0xE85C=v end })
+_0xA828:Label(string.char(84,114,97,99,101,114,32,67,111,108,111,114)):Colorpicker({ Flag=string.char(84,114,97,99,101,114,67,111,108,111,114), Default=Color3.fromRGB(255,255,255),
+Callback=function(_0x7CAC) _0xA4E7=_0x7CAC end })
+local _0x02C8 = _0x094E:Section({ Name=string.char(65,105,109,98,111,116), Description=string.char(67,111,110,102,105,103), Side=2 })
+_0x02C8:Toggle({ Name=string.char(69,110,97,98,108,101,100), Flag=string.char(65,105,109,69,110,97,98,108,101,100), Default=false,
+Callback=function(v) _0x5CFF:Log(string.char(65,105,109,98,111,116,58,32)..tostring(v), 3) end })
+_0x02C8:Toggle({ Name=string.char(65,105,109,68,111,116), Flag=string.char(65,105,109,68,111,116,69,110,97,98,108,101,100), Default=false,
+Callback=function(v) _0x899D=v end })
+_0x02C8:Slider({ Name=string.char(65,105,109,68,111,116,32,82,97,100,105,117,115), Flag=string.char(65,105,109,68,111,116,82,97,100,105,117,115), Min=1, Max=50, Default=3, Decimals=1,
+Callback=function(v) _0x55AE=v end })
+_0x02C8:Label(string.char(65,105,109,68,111,116,32,67,111,108,111,114)):Colorpicker({ Flag=string.char(65,105,109,68,111,116,67,111,108,111,114), Default=Color3.fromRGB(255,255,255),
+Callback=function(_0x7CAC) _0xA540=_0x7CAC end })
+_0x02C8:Slider({ Name=string.char(70,79,86), Flag=string.char(65,105,109,70,79,86), Min=0, Max=360, Default=90, Decimals=1, Suffix=string.char(194,176),
+Callback=function(v) _0xCB17=v end })
+_0x02C8:Slider({ Name=string.char(83,109,111,111,116,104,105,110,103), Flag=string.char(65,105,109,83,109,111,111,116,104), Min=0.05, Max=1, Default=0.35, Decimals=0.05,
+Callback=function(v) _0x8DEC=v end })
+_0x02C8:Dropdown({ Name=string.char(72,105,116,98,111,120), Flag=string.char(65,105,109,72,105,116,98,111,120), Size=180,
+Items={string.char(72,101,97,100),string.char(84,111,114,115,111),string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116),string.char(85,112,112,101,114,84,111,114,115,111),string.char(76,111,119,101,114,84,111,114,115,111)}, Default=string.char(72,101,97,100),
+Callback=function(v) _0x8A07=v end })
+_0x02C8:Dropdown({ Name=string.char(77,111,100,101), Flag=string.char(65,105,109,77,111,100,101), Size=180,
+Items={string.char(72,111,108,100),string.char(84,111,103,103,108,101),string.char(65,108,119,97,121,115)}, Default=string.char(72,111,108,100),
+Callback=function(v) _0x8DC6=v end })
+_0x02C8:Keybind({ Name=string.char(65,105,109,32,75,101,121), Flag=string.char(65,105,109,75,101,121), Default=Enum.KeyCode.E, Mode=string.char(72,111,108,100),
+Callback=function(_0x2F57) end })local _0x840D = _0xD066:Page({ Name=string.char(77,111,118,101,109,101,110,116), Icon=string.char(49,48,55,49,52,54,54,50,52,54,57,57,49,55,56)})
+local _0x4C6C = _0x840D:Section({ Name=string.char(83,112,101,101,100), Description=string.char(87,97,108,107), Side=1 })
+_0x4C6C:Toggle({ Name=string.char(83,112,101,101,100,32,72,97,99,107), Flag=string.char(83,112,101,101,100,69,110,97,98,108,101,100), Default=false,
+Callback=function(v)
+if v then _0xE441()
+else
+if _0x01B7 then _0x01B7:Disconnect(); _0x01B7=nil end
+local _0x7CAC=_0xA2BE.Character; if _0x7CAC then local _0x893C=_0x7CAC:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100)); if _0x893C then _0x893C.WalkSpeed=16 end end
+end
+end })
+_0x4C6C:Slider({ Name=string.char(87,97,108,107,115,112,101,101,100), Flag=string.char(83,112,101,101,100,86,97,108,117,101), Min=16, Max=300, Default=16, Decimals=1,
+Callback=function(v) _0x9D9A=v end })
+local _0x1FEB = _0x840D:Section({ Name=string.char(74,117,109,112), Description=string.char(80,111,119,101,114), Side=2 })
+_0x1FEB:Slider({ Name=string.char(74,117,109,112,80,111,119,101,114), Flag=string.char(74,117,109,112,80,111,119,101,114), Min=50, Max=500, Default=50, Decimals=1,
+Callback=function(v)
+local _0x7CAC=_0xA2BE.Character; if _0x7CAC then local _0x893C=_0x7CAC:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100)); if _0x893C then _0x893C.JumpPower=v end end
+end })
+_0x1FEB:Button({ Name=string.char(82,101,115,101,116,32,67,104,97,114,97,99,116,101,114), Callback=function()
+local _0x7CAC=_0xA2BE.Character; if _0x7CAC then local _0x893C=_0x7CAC:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100)); if _0x893C then _0x893C.Health=0 end end
+end })local _0x0ABB = _0xD066:Page({ Name=string.char(77,105,115,99), Icon=string.char(49,48,55,49,52,54,54,50,52,54,57,57,49,55,56)})
+local _0xEB88 = _0x0ABB:Section({ Name=string.char(84,101,108,101,112,111,114,116), Description=string.char(80,108,97,121,101,114,115), Side=1 })
+local _0x6068 = {}
+local function _0xC64C()
+_0x6068 = {}
+for _, _0x20CC in ipairs(_0x9731:GetPlayers()) do if _0x20CC ~= _0xA2BE then table.insert(_0x6068, _0x20CC.Name) end end
+end
+_0xC64C()
+local _0xE351 = _0xEB88:Dropdown({
+Name=string.char(80,108,97,121,101,114), Flag=string.char(84,80,84,97,114,103,101,116), Items=_0x6068, Default=nil, Size=180,
+Callback=function(v) end
+})
+_0xEB88:Button({ Name=string.char(82,101,102,114,101,115,104), Callback=function() _0xC64C(); _0xE351:Refresh(_0x6068) end })
+_0xEB88:Button({ Name=string.char(84,101,108,101,112,111,114,116), Callback=function()
+local _0x5D63 = _0x5CFF.Flags[string.char(84,80,84,97,114,103,101,116)]; if not _0x5D63 then return end
+local _0x2F57 = _0x9731:FindFirstChild(_0x5D63)
+if _0x2F57 and _0x2F57.Character and _0xA2BE.Character then
+local _0x7C1D = _0x2F57.Character:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))
+local _0x278F = _0xA2BE.Character:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))
+if _0x7C1D and _0x278F then _0x278F.CFrame = _0x7C1D.CFrame end
+end
+end })
+local _0x9C3A = _0x0ABB:Section({ Name=string.char(85,116,105,108,105,116,121), Description=string.char(79,116,104,101,114), Side=2 })
+_0x9C3A:Keybind({ Name=string.char(80,97,110,105,99,32,75,101,121), Flag=string.char(80,97,110,105,99,75,101,121), Default=Enum.KeyCode.P, Mode=string.char(84,111,103,103,108,101),
+Callback=function(_0x2F57) if _0x2F57 then _0x5CFF:Unload() end end })local _0xED30 = {string.char(69,83,80,69,110,97,98,108,101,100),string.char(84,114,97,99,101,114,69,110,97,98,108,101,100),string.char(65,105,109,68,111,116,69,110,97,98,108,101,100),string.char(83,112,101,101,100,69,110,97,98,108,101,100)}
+local function _0x72B0()
+for _, flag in ipairs(_0xED30) do
+local _0x1A03 = _0x5CFF and _0x5CFF.SetFlags and _0x5CFF.SetFlags[flag]
+if _0x1A03 then
+pcall(_0x1A03, false)
+end
+end
+pcall(function() _0x3F89.Visible = false end)
+end
+task.spawn(function()
+while _0x5CFF.Holder and _0x5CFF.Holder.Instance and _0x5CFF.Holder.Instance.Parent do
+for _, obj in ipairs(_0x5CFF.Holder.Instance:GetDescendants()) do
+if obj:IsA(string.char(84,101,120,116,66,117,116,116,111,110)) and not obj:GetAttribute(string.char(78,111,118,97,80,97,110,105,99,72,111,111,107)) then
+local _0xA885 = (obj.Text ==string.char(226,128,148))
+if not _0xA885 then
+for _, child in ipairs(obj:GetChildren()) do
+if child:IsA(string.char(84,101,120,116,76,97,98,101,108)) and child.Text ==string.char(226,128,148)then
+_0xA885 = true
+break
+end
+end
+end
+if _0xA885 then
+obj:SetAttribute(string.char(78,111,118,97,80,97,110,105,99,72,111,111,107), true)
+obj.MouseButton1Click:Connect(_0x72B0)
+end
+end
+end
+task.wait(0.3)
+end
 end)
-
-local KeyButton = Instance.new("TextButton")
-KeyButton.Name = "KeyButton"
-KeyButton.Size = UDim2.new(0, 220, 0, 24)
-KeyButton.Position = UDim2.new(0.5, -110, 0, 152)
-KeyButton.BackgroundColor3 = Colors.Panel
-KeyButton.BorderSizePixel = 1
-KeyButton.BorderColor3 = Colors.Accent2
-KeyButton.Font = Enum.Font.GothamBold
-KeyButton.Text = "APPLY"
-KeyButton.TextColor3 = Colors.Accent2
-KeyButton.TextSize = 10
-KeyButton.ZIndex = 4
-KeyButton.Active = true
-KeyButton.AutoLocalize = false
-KeyButton.Parent = KeyScreen
-
-KeyButton.MouseEnter:Connect(function()
-    TweenService:Create(KeyButton, TweenInfo.new(0.3), {BackgroundColor3 = Colors.Accent2}):Play()
-    TweenService:Create(KeyButton, TweenInfo.new(0.3), {TextColor3 = Colors.Panel}):Play()
-end)
-KeyButton.MouseLeave:Connect(function()
-    TweenService:Create(KeyButton, TweenInfo.new(0.3), {BackgroundColor3 = Colors.Panel}):Play()
-    TweenService:Create(KeyButton, TweenInfo.new(0.3), {TextColor3 = Colors.Accent2}):Play()
-end)
-
-local KeyError = Instance.new("TextLabel")
-KeyError.Name = "KeyError"
-KeyError.Size = UDim2.new(1, -40, 0, 16)
-KeyError.Position = UDim2.new(0, 10, 0, 188)
-KeyError.BackgroundTransparency = 1
-KeyError.Font = Enum.Font.GothamBold
-KeyError.Text = ""
-KeyError.TextColor3 = Colors.Accent2
-KeyError.TextSize = 9
-KeyError.TextXAlignment = Enum.TextXAlignment.Center
-KeyError.ZIndex = 4
-KeyError.Visible = false
-KeyError.AutoLocalize = false
-KeyError.Parent = KeyScreen
-
-local function ShowKeyError(message)
-    KeyError.Text = message
-    KeyError.Visible = true
-    KeyError.TextTransparency = 0
-    KeyError.TextColor3 = Colors.Accent2
-
-    KeyError.Position = UDim2.new(0, 10, 0, 190)
-    TweenService:Create(KeyError, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {Position = UDim2.new(0, 10, 0, 188)}):Play()
-
-    wait(0.3)
-    TweenService:Create(KeyError, TweenInfo.new(0.2), {TextTransparency = 0.5}):Play()
-    wait(0.2)
-    TweenService:Create(KeyError, TweenInfo.new(0.2), {TextTransparency = 0}):Play()
-end
-
---// Левая панель с вкладками
-local TabPanel = Instance.new("Frame")
-TabPanel.Name = "TabPanel"
-TabPanel.Size = UDim2.new(0, 45, 1, -29)
-TabPanel.Position = UDim2.new(0, 0, 0, 29)
-TabPanel.BackgroundColor3 = Colors.Panel
-TabPanel.BorderSizePixel = 0
-TabPanel.ZIndex = 3
-TabPanel.Visible = false
-TabPanel.Parent = MainFrame
-
-local ContentContainer = Instance.new("Frame")
-ContentContainer.Name = "ContentContainer"
-ContentContainer.Size = UDim2.new(1, -45, 1, -29)
-ContentContainer.Position = UDim2.new(0, 45, 0, 29)
-ContentContainer.BackgroundColor3 = Colors.Background
-ContentContainer.BorderSizePixel = 0
-ContentContainer.ZIndex = 3
-ContentContainer.Visible = false
-ContentContainer.Parent = MainFrame
-
---// Функция уведомления (уменьшена высота, ширина прежняя)
-local function ShowNotification(text)
-    local NotificationShadow = Instance.new("Frame")
-    NotificationShadow.Name = "NotificationShadow"
-    NotificationShadow.Size = UDim2.new(0, 150, 0, 24) -- было 30
-    NotificationShadow.Position = UDim2.new(1, 150, 0.5, -75)
-    NotificationShadow.BackgroundColor3 = Colors.Shadow
-    NotificationShadow.BackgroundTransparency = 0.25
-    NotificationShadow.BorderSizePixel = 0
-    NotificationShadow.ZIndex = 99
-    NotificationShadow.Parent = ScreenGui
-
-    local NotificationFrame = Instance.new("Frame")
-    NotificationFrame.Name = "Notification"
-    NotificationFrame.Size = UDim2.new(0, 142, 0, 16) -- было 22
-    NotificationFrame.Position = UDim2.new(1, 154, 0.5, -71)
-    NotificationFrame.BackgroundColor3 = Colors.Panel
-    NotificationFrame.BorderSizePixel = 0
-    NotificationFrame.ZIndex = 100
-    NotificationFrame.Parent = ScreenGui
-
-    local AccentBar = Instance.new("Frame")
-    AccentBar.Size = UDim2.new(0, 2, 1, 0)
-    AccentBar.BackgroundColor3 = Colors.Accent2
-    AccentBar.BorderSizePixel = 0
-    AccentBar.ZIndex = 101
-    AccentBar.Parent = NotificationFrame
-
-    local NotificationText = Instance.new("TextLabel")
-    NotificationText.Size = UDim2.new(1, -12, 1, 0)
-    NotificationText.Position = UDim2.new(0, 6, 0, 0)
-    NotificationText.BackgroundTransparency = 1
-    NotificationText.Font = Enum.Font.GothamBold
-    NotificationText.Text = text
-    NotificationText.TextColor3 = Colors.Text
-    NotificationText.TextSize = 9
-    NotificationText.ZIndex = 102
-    NotificationText.AutoLocalize = false
-    NotificationText.Parent = NotificationFrame
-
-    local tweenInShadow = TweenService:Create(NotificationShadow, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(1, -156, 0.5, -75)})
-    tweenInShadow:Play()
-
-    local tweenIn = TweenService:Create(NotificationFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(1, -152, 0.5, -71)})
-    tweenIn:Play()
-
-    wait(3)
-
-    local tweenOutShadow = TweenService:Create(NotificationShadow, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-        {Position = UDim2.new(1, 150, 0.5, -75)})
-    tweenOutShadow:Play()
-
-    local tweenOut = TweenService:Create(NotificationFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-        {Position = UDim2.new(1, 154, 0.5, -71)})
-    tweenOut:Play()
-
-    tweenOut.Completed:Connect(function()
-        NotificationFrame:Destroy()
-        NotificationShadow:Destroy()
-    end)
-end
-
---// Создание вкладок
-local function CreateTab(name, layoutOrder)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Name = name .. "Tab"
-    TabButton.Size = UDim2.new(1, -8, 0, 17)
-    TabButton.Position = UDim2.new(0, 4, 0, 4 + (layoutOrder - 1) * 20)
-    TabButton.BackgroundColor3 = Colors.Hover
-    TabButton.BorderSizePixel = 0
-    TabButton.Font = Enum.Font.GothamBold
-    TabButton.Text = ""
-    TabButton.AutoLocalize = false
-    TabButton.ZIndex = 4
-    TabButton.Active = true
-    TabButton.Parent = TabPanel
-
-    local TabLabel = Instance.new("TextLabel")
-    TabLabel.Name = "Label"
-    TabLabel.Size = UDim2.new(1, 0, 1, 0)
-    TabLabel.BackgroundTransparency = 1
-    TabLabel.Font = Enum.Font.GothamBold
-    TabLabel.Text = name
-    TabLabel.TextColor3 = Colors.TextSecondary
-    TabLabel.TextSize = 6
-    TabLabel.AutoLocalize = false
-    TabLabel.ZIndex = 5
-    TabLabel.Parent = TabButton
-
-    TabButton.MouseEnter:Connect(function()
-        if TabLabel.TextColor3 ~= Colors.Text then
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(235, 235, 240)}):Play()
-        end
-    end)
-    TabButton.MouseLeave:Connect(function()
-        if TabLabel.TextColor3 ~= Colors.Text then
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-        end
-    end)
-
-    return TabButton, TabLabel
-end
-
-local function CreateTabContent(name)
-    local Content = Instance.new("ScrollingFrame")
-    Content.Name = name .. "Content"
-    Content.Size = UDim2.new(1, 0, 1, 0)
-    Content.Position = UDim2.new(0, 0, 0, 0)
-    Content.BackgroundTransparency = 1
-    Content.BorderSizePixel = 0
-    Content.ScrollBarThickness = 2
-    Content.ScrollBarImageColor3 = Colors.Border
-    Content.CanvasSize = UDim2.new(0, 0, 0, 0)
-    Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    Content.ZIndex = 3
-    Content.Active = true
-    Content.Visible = false
-    Content.Parent = ContentContainer
-
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Name = "FunctionList"
-    UIListLayout.Padding = UDim.new(0, 4)
-    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Parent = Content
-
-    return Content
-end
-
-local MiscTabButton, MiscTabLabel = CreateTab("Misc", 1)
-local TeleportTabButton, TeleportTabLabel = CreateTab("Exploit", 2)
-local SettingsTabButton, SettingsTabLabel = CreateTab("Settings", 3)
-
-local MiscTabContent = CreateTabContent("Misc")
-local TeleportTabContent = CreateTabContent("Exploit")
-local SettingsTabContent = CreateTabContent("Settings")
-
-local function SwitchTab(tabName)
-    MiscTabContent.Visible = false
-    TeleportTabContent.Visible = false
-    SettingsTabContent.Visible = false
-
-    TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-    TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-    TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Hover}):Play()
-
-    MiscTabLabel.TextColor3 = Colors.TextSecondary
-    TeleportTabLabel.TextColor3 = Colors.TextSecondary
-    SettingsTabLabel.TextColor3 = Colors.TextSecondary
-
-    if tabName == "Misc" then
-        MiscTabContent.Visible = true
-        TweenService:Create(MiscTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-        MiscTabLabel.TextColor3 = Colors.Text
-    elseif tabName == "Exploit" then
-        TeleportTabContent.Visible = true
-        TweenService:Create(TeleportTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-        TeleportTabLabel.TextColor3 = Colors.Text
-    elseif tabName == "Settings" then
-        SettingsTabContent.Visible = true
-        TweenService:Create(SettingsTabButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-        SettingsTabLabel.TextColor3 = Colors.Text
-    end
-end
-
-MiscTabButton.MouseButton1Click:Connect(function() SwitchTab("Misc") end)
-TeleportTabButton.MouseButton1Click:Connect(function() SwitchTab("Exploit") end)
-SettingsTabButton.MouseButton1Click:Connect(function() SwitchTab("Settings") end)
-
---// Функция создания элемента функции
-local function CreateFunctionInTab(parent, name, description, layoutOrder, callback)
-    local FunctionFrame = Instance.new("Frame")
-    FunctionFrame.Name = name .. "_Frame"
-    FunctionFrame.Size = UDim2.new(1, -8, 0, 38)
-    FunctionFrame.BackgroundColor3 = Colors.Panel
-    FunctionFrame.BorderSizePixel = 0
-    FunctionFrame.LayoutOrder = layoutOrder
-    FunctionFrame.ZIndex = 3
-    FunctionFrame.Active = true
-    FunctionFrame.Parent = parent
-
-    local AccentBar = Instance.new("Frame")
-    AccentBar.Size = UDim2.new(0, 3, 1, 0)
-    AccentBar.BackgroundColor3 = Colors.Accent2
-    AccentBar.BorderSizePixel = 0
-    AccentBar.ZIndex = 4
-    AccentBar.Parent = FunctionFrame
-
-    local FunctionName = Instance.new("TextLabel")
-    FunctionName.Name = "FunctionName"
-    FunctionName.Size = UDim2.new(1, -45, 0, 13)
-    FunctionName.Position = UDim2.new(0, 10, 0, 4)
-    FunctionName.BackgroundTransparency = 1
-    FunctionName.Font = Enum.Font.GothamBold
-    FunctionName.Text = name
-    FunctionName.TextColor3 = Colors.Text
-    FunctionName.TextSize = 9
-    FunctionName.TextXAlignment = Enum.TextXAlignment.Left
-    FunctionName.ZIndex = 5
-    FunctionName.AutoLocalize = false
-    FunctionName.Parent = FunctionFrame
-
-    local FunctionDescription = Instance.new("TextLabel")
-    FunctionDescription.Name = "Description"
-    FunctionDescription.Size = UDim2.new(1, -45, 0, 9)
-    FunctionDescription.Position = UDim2.new(0, 10, 0, 19)
-    FunctionDescription.BackgroundTransparency = 1
-    FunctionDescription.Font = Enum.Font.Gotham
-    FunctionDescription.Text = description
-    FunctionDescription.TextColor3 = Colors.TextSecondary
-    FunctionDescription.TextSize = 5
-    FunctionDescription.TextXAlignment = Enum.TextXAlignment.Left
-    FunctionDescription.TextWrapped = true
-    FunctionDescription.ZIndex = 5
-    FunctionDescription.AutoLocalize = false
-    FunctionDescription.Parent = FunctionFrame
-
-    local Checkbox = Instance.new("Frame")
-    Checkbox.Name = "Checkbox"
-    Checkbox.Size = UDim2.new(0, 14, 0, 14)
-    Checkbox.Position = UDim2.new(1, -21, 0, 12)
-    Checkbox.BackgroundColor3 = Colors.CheckboxOff
-    Checkbox.BorderSizePixel = 0
-    Checkbox.ZIndex = 6
-    Checkbox.Parent = FunctionFrame
-
-    local MainButton = Instance.new("TextButton")
-    MainButton.Name = "MainButton"
-    MainButton.Size = UDim2.new(1, 0, 1, 0)
-    MainButton.Position = UDim2.new(0, 0, 0, 0)
-    MainButton.BackgroundTransparency = 1
-    MainButton.BorderSizePixel = 0
-    MainButton.Text = ""
-    MainButton.ZIndex = 7
-    MainButton.Active = true
-    MainButton.AutoLocalize = false
-    MainButton.Parent = FunctionFrame
-
-    local isToggled = false
-    local function UpdateToggle()
-        if isToggled then
-            TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOn}):Play()
-        else
-            TweenService:Create(Checkbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOff}):Play()
-        end
-    end
-
-    MainButton.MouseButton1Click:Connect(function()
-        isToggled = not isToggled
-        UpdateToggle()
-        if callback then
-            callback(isToggled)
-        end
-        if isToggled then
-            ShowNotification(name .. " enabled")
-        end
-    end)
-
-    MainButton.MouseEnter:Connect(function()
-        TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(252, 252, 252)}):Play()
-    end)
-    MainButton.MouseLeave:Connect(function()
-        TweenService:Create(FunctionFrame, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-    end)
-
-    return {
-        Frame = FunctionFrame,
-        Checkbox = Checkbox,
-        MainButton = MainButton,
-        IsToggled = function() return isToggled end,
-        SetToggled = function(value)
-            isToggled = value
-            UpdateToggle()
-            if callback then
-                callback(isToggled)
-            end
-        end
-    }
-end
-
---// Функция проверки врага
-local function IsEnemy(targetPlayer)
-    local localPlayer = Players.LocalPlayer
-    if targetPlayer.Team and localPlayer.Team then
-        return targetPlayer.Team ~= localPlayer.Team
-    end
-    if not localPlayer.Team then return true end
-    if not targetPlayer.Team then return true end
-    return false
-end
-
---// Arrows
-local ArrowObjects = {}
-local ArrowsEnabled = true
-local ArrowDistance = 40
-
-local function RemoveAllArrows()
-    for playerName, arrowData in pairs(ArrowObjects) do
-        if arrowData.Arrow then arrowData.Arrow:Remove() end
-        if arrowData.Connection then arrowData.Connection:Disconnect() end
-        ArrowObjects[playerName] = nil
-    end
-end
-
-local function ArrowsFunction(enabled)
-    ArrowsEnabled = enabled
-    if enabled then
-        for _, v in pairs(Players:GetPlayers()) do
-            if v ~= player and IsEnemy(v) and not ArrowObjects[v.Name] then
-                DrawArrow(v)
-            end
-        end
-        Players.PlayerAdded:Connect(function(newPlayer)
-            if newPlayer ~= player and IsEnemy(newPlayer) and not ArrowObjects[newPlayer.Name] then
-                wait(1)
-                DrawArrow(newPlayer)
-            end
-        end)
-    else
-        RemoveAllArrows()
-    end
-end
-
-function DrawArrow(plr)
-    if not IsEnemy(plr) then return end
-
-    local Arrow = Drawing.new("Triangle")
-    Arrow.Visible = false
-    Arrow.Color = Color3.fromRGB(255, 255, 255)
-    Arrow.Thickness = 1
-    Arrow.Transparency = 1
-    Arrow.Filled = false
-
-    local connection
-    connection = game:GetService("RunService").RenderStepped:Connect(function()
-        if ArrowObjects[plr.Name] then
-            if plr.Character ~= nil and plr.Character:FindFirstChildOfClass("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-                local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
-                local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-
-                if ArrowsEnabled and not vis then
-                    local direction = Vector2.new(pos.X - screenCenter.X, pos.Y - screenCenter.Y)
-                    if direction.Magnitude > 0 then
-                        direction = direction.Unit
-                        local arrowPos = screenCenter + direction * ArrowDistance
-
-                        local angle = math.atan2(direction.Y, direction.X)
-                        local arrowSize = 6.4
-                        local p1 = arrowPos + Vector2.new(math.cos(angle) * arrowSize, math.sin(angle) * arrowSize)
-                        local p2 = arrowPos + Vector2.new(math.cos(angle + 2.5) * arrowSize, math.sin(angle + 2.5) * arrowSize)
-                        local p3 = arrowPos + Vector2.new(math.cos(angle - 2.5) * arrowSize, math.sin(angle - 2.5) * arrowSize)
-
-                        Arrow.PointA = p1
-                        Arrow.PointB = p2
-                        Arrow.PointC = p3
-                        Arrow.Visible = true
-                    else
-                        Arrow.Visible = false
-                    end
-                else
-                    Arrow.Visible = false
-                end
-            else
-                Arrow.Visible = false
-                if game.Players:FindFirstChild(plr.Name) == nil then
-                    connection:Disconnect()
-                    Arrow:Remove()
-                    ArrowObjects[plr.Name] = nil
-                end
-            end
-        else
-            Arrow:Remove()
-            connection:Disconnect()
-        end
-    end)
-
-    ArrowObjects[plr.Name] = {
-        Arrow = Arrow,
-        Connection = connection
-    }
-end
-
---// ESP (с автообновлением при смерти/возрождении)
-local ESPShowDistance = true
-local ESPShowHealth = true
-local ESPShowTracer = false
-
-local ESPObjects = {}
-local ESPEnabled = false
-local ESPConnection = nil
-
-local function RemoveAllESP()
-    for playerName, espData in pairs(ESPObjects) do
-        if espData.Box then espData.Box:Remove() end
-        if espData.HealthBar then espData.HealthBar:Remove() end
-        if espData.HealthBarBackground then espData.HealthBarBackground:Remove() end
-        if espData.DistanceText then espData.DistanceText:Remove() end
-        if espData.Connection then espData.Connection:Disconnect() end
-        if espData.CharacterAddedConnection then espData.CharacterAddedConnection:Disconnect() end
-        ESPObjects[playerName] = nil
-    end
-end
-
-local function CreateESP(plr)
-    local Box = Drawing.new("Square")
-    Box.Visible = false
-    Box.Color = Color3.fromRGB(255, 255, 255)
-    Box.Thickness = 2
-    Box.Transparency = 1
-    Box.Filled = false
-
-    local HealthBarBackground = Drawing.new("Line")
-    HealthBarBackground.Visible = false
-    HealthBarBackground.Color = Color3.fromRGB(50, 50, 50)
-    HealthBarBackground.Thickness = 3
-    HealthBarBackground.Transparency = 1
-
-    local HealthBar = Drawing.new("Line")
-    HealthBar.Visible = false
-    HealthBar.Color = Color3.fromRGB(255, 0, 0)
-    HealthBar.Thickness = 3
-    HealthBar.Transparency = 1
-
-    local DistanceText = Drawing.new("Text")
-    DistanceText.Visible = false
-    DistanceText.Color = Color3.fromRGB(255, 255, 255)
-    DistanceText.Size = 8
-    DistanceText.Center = false
-    DistanceText.Outline = false
-
-    local connection
-    connection = RunService.RenderStepped:Connect(function()
-        if ESPObjects[plr.Name] then
-            if plr.Character ~= nil and plr.Character:FindFirstChildOfClass("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-                local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
-                local rootPart = plr.Character:FindFirstChild("HumanoidRootPart")
-                local head = plr.Character:FindFirstChild("Head")
-
-                if head and rootPart and ESPEnabled then
-                    local headPos, headVisible = Camera:WorldToViewportPoint(head.Position)
-                    local rootPos, rootVisible = Camera:WorldToViewportPoint(rootPart.Position)
-
-                    if headVisible or rootVisible then
-                        local screenHeight = Camera.ViewportSize.Y
-
-                        local distance = (Camera.CFrame.Position - rootPart.Position).Magnitude
-                        local boxHeight = math.clamp(screenHeight / (distance * 0.2), 10, 30)
-                        local boxWidth = boxHeight * 0.4
-
-                        local boxX = headPos.X - boxWidth / 2
-                        local boxY = headPos.Y - boxHeight * 0.1
-
-                        Box.Position = Vector2.new(boxX, boxY)
-                        Box.Size = Vector2.new(boxWidth, boxHeight)
-                        Box.Visible = true
-
-                        if ESPShowHealth then
-                            local health = humanoid.Health / humanoid.MaxHealth
-                            local healthBarX = boxX + boxWidth + 5
-                            local healthBarTop = boxY
-                            local healthBarBottom = boxY + boxHeight
-
-                            HealthBarBackground.From = Vector2.new(healthBarX, healthBarTop)
-                            HealthBarBackground.To = Vector2.new(healthBarX, healthBarBottom)
-                            HealthBarBackground.Visible = true
-
-                            local healthBarCurrentBottom = healthBarTop + (boxHeight * health)
-                            HealthBar.From = Vector2.new(healthBarX, healthBarTop)
-                            HealthBar.To = Vector2.new(healthBarX, healthBarCurrentBottom)
-                            HealthBar.Visible = true
-                        else
-                            HealthBarBackground.Visible = false
-                            HealthBar.Visible = false
-                        end
-
-                        if ESPShowDistance then
-                            local distanceInMeters = math.floor(distance)
-                            DistanceText.Text = distanceInMeters .. "m"
-                            DistanceText.Position = Vector2.new(boxX + boxWidth + 8, headPos.Y - 5)
-                            DistanceText.Visible = true
-                        else
-                            DistanceText.Visible = false
-                        end
-                    else
-                        Box.Visible = false
-                        HealthBarBackground.Visible = false
-                        HealthBar.Visible = false
-                        DistanceText.Visible = false
-                    end
-                else
-                    Box.Visible = false
-                    HealthBarBackground.Visible = false
-                    HealthBar.Visible = false
-                    DistanceText.Visible = false
-                end
-            else
-                Box.Visible = false
-                HealthBarBackground.Visible = false
-                HealthBar.Visible = false
-                DistanceText.Visible = false
-                if game.Players:FindFirstChild(plr.Name) == nil then
-                    connection:Disconnect()
-                    Box:Remove()
-                    HealthBarBackground:Remove()
-                    HealthBar:Remove()
-                    DistanceText:Remove()
-                    if ESPObjects[plr.Name] and ESPObjects[plr.Name].CharacterAddedConnection then
-                        ESPObjects[plr.Name].CharacterAddedConnection:Disconnect()
-                    end
-                    ESPObjects[plr.Name] = nil
-                end
-            end
-        else
-            Box:Remove()
-            HealthBarBackground:Remove()
-            HealthBar:Remove()
-            DistanceText:Remove()
-            connection:Disconnect()
-        end
-    end)
-
-    ESPObjects[plr.Name] = {
-        Box = Box,
-        HealthBar = HealthBar,
-        HealthBarBackground = HealthBarBackground,
-        DistanceText = DistanceText,
-        Connection = connection,
-        CharacterAddedConnection = nil -- будет установлено в ESPFunction
-    }
-end
-
-local function ESPFunction(enabled)
-    ESPEnabled = enabled
-    if enabled then
-        for _, v in pairs(Players:GetPlayers()) do
-            if v ~= player and IsEnemy(v) and not ESPObjects[v.Name] then
-                CreateESP(v)
-                -- Подписка на возрождение
-                if not ESPObjects[v.Name].CharacterAddedConnection then
-                    ESPObjects[v.Name].CharacterAddedConnection = v.CharacterAdded:Connect(function()
-                        local espData = ESPObjects[v.Name]
-                        if espData then
-                            if espData.Box then espData.Box:Remove() end
-                            if espData.HealthBar then espData.HealthBar:Remove() end
-                            if espData.HealthBarBackground then espData.HealthBarBackground:Remove() end
-                            if espData.DistanceText then espData.DistanceText:Remove() end
-                            if espData.Connection then espData.Connection:Disconnect() end
-                            if espData.CharacterAddedConnection then espData.CharacterAddedConnection:Disconnect() end
-                            ESPObjects[v.Name] = nil
-                        end
-                        wait(0.5)
-                        if ESPEnabled and v ~= player and IsEnemy(v) then
-                            CreateESP(v)
-                        end
-                    end)
-                end
-            end
-        end
-
-        ESPConnection = Players.PlayerAdded:Connect(function(newPlayer)
-            if newPlayer ~= player and IsEnemy(newPlayer) and not ESPObjects[newPlayer.Name] then
-                wait(1)
-                CreateESP(newPlayer)
-                if not ESPObjects[newPlayer.Name].CharacterAddedConnection then
-                    ESPObjects[newPlayer.Name].CharacterAddedConnection = newPlayer.CharacterAdded:Connect(function()
-                        local espData = ESPObjects[newPlayer.Name]
-                        if espData then
-                            if espData.Box then espData.Box:Remove() end
-                            if espData.HealthBar then espData.HealthBar:Remove() end
-                            if espData.HealthBarBackground then espData.HealthBarBackground:Remove() end
-                            if espData.DistanceText then espData.DistanceText:Remove() end
-                            if espData.Connection then espData.Connection:Disconnect() end
-                            if espData.CharacterAddedConnection then espData.CharacterAddedConnection:Disconnect() end
-                            ESPObjects[newPlayer.Name] = nil
-                        end
-                        wait(0.5)
-                        if ESPEnabled and newPlayer ~= player and IsEnemy(newPlayer) then
-                            CreateESP(newPlayer)
-                        end
-                    end)
-                end
-            end
-        end)
-    else
-        RemoveAllESP()
-        if ESPConnection then
-            ESPConnection:Disconnect()
-            ESPConnection = nil
-        end
-    end
-end
-
---// Tracer (с автообновлением при смерти/возрождении)
-local TracerObjects = {}
-local TracerEnabled = false
-local TracerConnection = nil
-
-local function RemoveAllTracers()
-    for playerName, tracerData in pairs(TracerObjects) do
-        if tracerData.Line then tracerData.Line:Remove() end
-        if tracerData.Connection then tracerData.Connection:Disconnect() end
-        if tracerData.CharacterAddedConnection then tracerData.CharacterAddedConnection:Disconnect() end
-        TracerObjects[playerName] = nil
-    end
-end
-
-local function CreateTracer(plr)
-    local Line = Drawing.new("Line")
-    Line.Visible = false
-    Line.Color = Color3.fromRGB(255, 255, 255)
-    Line.Thickness = 1
-    Line.Transparency = 1
-
-    local connection
-    connection = RunService.RenderStepped:Connect(function()
-        if TracerObjects[plr.Name] then
-            if plr.Character ~= nil and plr.Character:FindFirstChildOfClass("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-                local targetRoot = plr.Character:FindFirstChild("HumanoidRootPart")
-
-                if targetRoot and TracerEnabled and ESPShowTracer then
-                    local targetPos = targetRoot.Position
-                    local targetScreenPos, targetVisible = Camera:WorldToViewportPoint(targetPos)
-                    local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
-
-                    if targetVisible then
-                        Line.From = screenBottom
-                        Line.To = Vector2.new(targetScreenPos.X, targetScreenPos.Y)
-                        Line.Visible = true
-                    else
-                        Line.Visible = false
-                    end
-                else
-                    Line.Visible = false
-                end
-            else
-                Line.Visible = false
-                if game.Players:FindFirstChild(plr.Name) == nil then
-                    connection:Disconnect()
-                    Line:Remove()
-                    if TracerObjects[plr.Name] and TracerObjects[plr.Name].CharacterAddedConnection then
-                        TracerObjects[plr.Name].CharacterAddedConnection:Disconnect()
-                    end
-                    TracerObjects[plr.Name] = nil
-                end
-            end
-        else
-            Line:Remove()
-            connection:Disconnect()
-        end
-    end)
-
-    TracerObjects[plr.Name] = {
-        Line = Line,
-        Connection = connection,
-        CharacterAddedConnection = nil
-    }
-end
-
-local function TracerFunction(enabled)
-    TracerEnabled = enabled
-    if enabled and ESPShowTracer then
-        RemoveAllTracers()
-
-        for _, v in pairs(Players:GetPlayers()) do
-            if v ~= player and IsEnemy(v) and not TracerObjects[v.Name] then
-                CreateTracer(v)
-                if not TracerObjects[v.Name].CharacterAddedConnection then
-                    TracerObjects[v.Name].CharacterAddedConnection = v.CharacterAdded:Connect(function()
-                        local tracerData = TracerObjects[v.Name]
-                        if tracerData then
-                            if tracerData.Line then tracerData.Line:Remove() end
-                            if tracerData.Connection then tracerData.Connection:Disconnect() end
-                            if tracerData.CharacterAddedConnection then tracerData.CharacterAddedConnection:Disconnect() end
-                            TracerObjects[v.Name] = nil
-                        end
-                        wait(0.5)
-                        if TracerEnabled and ESPShowTracer and v ~= player and IsEnemy(v) then
-                            CreateTracer(v)
-                        end
-                    end)
-                end
-            end
-        end
-
-        if TracerConnection then
-            TracerConnection:Disconnect()
-        end
-
-        TracerConnection = Players.PlayerAdded:Connect(function(newPlayer)
-            if newPlayer ~= player and IsEnemy(newPlayer) and ESPShowTracer and not TracerObjects[newPlayer.Name] then
-                wait(1)
-                CreateTracer(newPlayer)
-                if not TracerObjects[newPlayer.Name].CharacterAddedConnection then
-                    TracerObjects[newPlayer.Name].CharacterAddedConnection = newPlayer.CharacterAdded:Connect(function()
-                        local tracerData = TracerObjects[newPlayer.Name]
-                        if tracerData then
-                            if tracerData.Line then tracerData.Line:Remove() end
-                            if tracerData.Connection then tracerData.Connection:Disconnect() end
-                            if tracerData.CharacterAddedConnection then tracerData.CharacterAddedConnection:Disconnect() end
-                            TracerObjects[newPlayer.Name] = nil
-                        end
-                        wait(0.5)
-                        if TracerEnabled and ESPShowTracer and newPlayer ~= player and IsEnemy(newPlayer) then
-                            CreateTracer(newPlayer)
-                        end
-                    end)
-                end
-            end
-        end)
-    else
-        RemoveAllTracers()
-        if TracerConnection then
-            TracerConnection:Disconnect()
-            TracerConnection = nil
-        end
-    end
-end
-
---// Создание кнопки Spawn Locations
-local TeleportFunction = CreateFunctionInTab(TeleportTabContent, "Spawn Locations", "Teleport to spawns", 1, function(enabled)
-    if enabled then
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local spawnLocation = player.RespawnLocation
-
-            if spawnLocation then
-                player.Character.HumanoidRootPart.CFrame = spawnLocation.CFrame
-                ShowNotification("Teleport you")
-            else
-                local spawns = {}
-                for _, obj in pairs(Workspace:GetDescendants()) do
-                    if obj:IsA("SpawnLocation") then
-                        table.insert(spawns, obj)
-                    end
-                end
-
-                if #spawns > 0 then
-                    player.Character.HumanoidRootPart.CFrame = spawns[1].CFrame
-                    ShowNotification("Teleport you")
-                else
-                    ShowNotification("No spawn found!")
-                end
-            end
-        else
-            ShowNotification("Character not found!")
-        end
-    end
-end)
-
---// Выдвижная кнопка Teleport Players
-local TeleportPlayersToggle = Instance.new("TextButton")
-TeleportPlayersToggle.Name = "TeleportPlayersToggle"
-TeleportPlayersToggle.Size = UDim2.new(1, -8, 0, 23)
-TeleportPlayersToggle.BackgroundColor3 = Colors.Panel
-TeleportPlayersToggle.BorderSizePixel = 0
-TeleportPlayersToggle.LayoutOrder = 2
-TeleportPlayersToggle.ZIndex = 3
-TeleportPlayersToggle.Text = ""
-TeleportPlayersToggle.AutoLocalize = false
-TeleportPlayersToggle.Parent = TeleportTabContent
-
-local TeleportPlayersFrame = Instance.new("Frame")
-TeleportPlayersFrame.Size = UDim2.new(1, -8, 0, 0)
-TeleportPlayersFrame.BackgroundColor3 = Colors.Panel
-TeleportPlayersFrame.BorderSizePixel = 0
-TeleportPlayersFrame.LayoutOrder = 3
-TeleportPlayersFrame.ZIndex = 3
-TeleportPlayersFrame.ClipsDescendants = true
-TeleportPlayersFrame.Parent = TeleportTabContent
-
-local isTeleportPlayersOpen = false
-
-TeleportPlayersToggle.MouseButton1Click:Connect(function()
-    isTeleportPlayersOpen = not isTeleportPlayersOpen
-    if isTeleportPlayersOpen then
-        for _, child in pairs(TeleportPlayersFrame:GetChildren()) do
-            if child:IsA("TextButton") then
-                child:Destroy()
-            end
-        end
-
-        local yPos = 4
-        for _, targetPlayer in pairs(Players:GetPlayers()) do
-            if targetPlayer ~= player then
-                local PlayerButton = Instance.new("TextButton")
-                PlayerButton.Name = targetPlayer.Name .. "_Button"
-                PlayerButton.Size = UDim2.new(1, -16, 0, 27)
-                PlayerButton.Position = UDim2.new(0, 8, 0, yPos)
-                PlayerButton.BackgroundColor3 = Colors.Panel
-                PlayerButton.BorderSizePixel = 0
-                PlayerButton.Font = Enum.Font.Gotham
-                PlayerButton.Text = targetPlayer.Name
-                PlayerButton.TextColor3 = Colors.Text
-                PlayerButton.TextSize = 8
-                PlayerButton.ZIndex = 4
-                PlayerButton.AutoLocalize = false
-                PlayerButton.Parent = TeleportPlayersFrame
-
-                local PlayerAccentBar = Instance.new("Frame")
-                PlayerAccentBar.Size = UDim2.new(0, 3, 1, 0)
-                PlayerAccentBar.BackgroundColor3 = Colors.Accent2
-                PlayerAccentBar.BorderSizePixel = 0
-                PlayerAccentBar.ZIndex = 5
-                PlayerAccentBar.Parent = PlayerButton
-
-                PlayerButton.MouseEnter:Connect(function()
-                    TweenService:Create(PlayerButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(250, 250, 252)}):Play()
-                end)
-                PlayerButton.MouseLeave:Connect(function()
-                    TweenService:Create(PlayerButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-                end)
-
-                PlayerButton.MouseButton1Click:Connect(function()
-                    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                        if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                            player.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
-                            ShowNotification("Teleported to " .. targetPlayer.Name)
-                        else
-                            ShowNotification("Target not found!")
-                        end
-                    else
-                        ShowNotification("Character not found!")
-                    end
-                end)
-
-                yPos = yPos + 31
-            end
-        end
-
-        local totalHeight = math.max(yPos + 4, 35)
-        TweenService:Create(TeleportPlayersFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(1, -8, 0, totalHeight)}):Play()
-    else
-        TweenService:Create(TeleportPlayersFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-            {Size = UDim2.new(1, -8, 0, 0)}):Play()
-    end
-end)
-
---// Выдвижная кнопка Arrow Distance
-local ArrowSliderToggle = Instance.new("TextButton")
-ArrowSliderToggle.Name = "ArrowSliderToggle"
-ArrowSliderToggle.Size = UDim2.new(1, -8, 0, 23)
-ArrowSliderToggle.BackgroundColor3 = Colors.Panel
-ArrowSliderToggle.BorderSizePixel = 0
-ArrowSliderToggle.LayoutOrder = 2
-ArrowSliderToggle.ZIndex = 3
-ArrowSliderToggle.Text = ""
-ArrowSliderToggle.AutoLocalize = false
-ArrowSliderToggle.Parent = MiscTabContent
-
-local ArrowDistanceSlider = Instance.new("Frame")
-ArrowDistanceSlider.Name = "ArrowDistanceSlider"
-ArrowDistanceSlider.Size = UDim2.new(1, -8, 0, 0)
-ArrowDistanceSlider.BackgroundColor3 = Colors.Panel
-ArrowDistanceSlider.BorderSizePixel = 0
-ArrowDistanceSlider.LayoutOrder = 3
-ArrowDistanceSlider.ZIndex = 3
-ArrowDistanceSlider.ClipsDescendants = true
-ArrowDistanceSlider.Parent = MiscTabContent
-
-local SliderAccent = Instance.new("Frame")
-SliderAccent.Size = UDim2.new(0, 3, 1, 0)
-SliderAccent.BackgroundColor3 = Colors.Accent2
-SliderAccent.BorderSizePixel = 0
-SliderAccent.ZIndex = 4
-SliderAccent.Parent = ArrowDistanceSlider
-
-local ArrowDistanceTitle = Instance.new("TextLabel")
-ArrowDistanceTitle.Size = UDim2.new(1, -16, 0, 12)
-ArrowDistanceTitle.Position = UDim2.new(0, 10, 0, 3)
-ArrowDistanceTitle.BackgroundTransparency = 1
-ArrowDistanceTitle.Font = Enum.Font.GothamBold
-ArrowDistanceTitle.Text = "Arrow Distance: " .. ArrowDistance
-ArrowDistanceTitle.TextColor3 = Colors.Text
-ArrowDistanceTitle.TextSize = 7
-ArrowDistanceTitle.TextXAlignment = Enum.TextXAlignment.Left
-ArrowDistanceTitle.ZIndex = 5
-ArrowDistanceTitle.AutoLocalize = false
-ArrowDistanceTitle.Parent = ArrowDistanceSlider
-
-local SliderBar = Instance.new("Frame")
-SliderBar.Size = UDim2.new(1, -20, 0, 4)
-SliderBar.Position = UDim2.new(0, 10, 0, 22)
-SliderBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-SliderBar.BorderSizePixel = 0
-SliderBar.ZIndex = 5
-SliderBar.Parent = ArrowDistanceSlider
-
-local SliderFill = Instance.new("Frame")
-SliderFill.Size = UDim2.new(ArrowDistance / 200, 0, 1, 0)
-SliderFill.BackgroundColor3 = Colors.Accent2
-SliderFill.BorderSizePixel = 0
-SliderFill.ZIndex = 6
-SliderFill.Parent = SliderBar
-
-local isSliderOpen = false
-
-local function ToggleSlider()
-    isSliderOpen = not isSliderOpen
-
-    if isSliderOpen then
-        -- ИЗМЕНЕНО: было 38, стало 35 (как у Tracer)
-        TweenService:Create(ArrowDistanceSlider, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(1, -8, 0, 35)}):Play()
-    else
-        TweenService:Create(ArrowDistanceSlider, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-            {Size = UDim2.new(1, -8, 0, 0)}):Play()
-    end
-end
-
-ArrowSliderToggle.MouseButton1Click:Connect(ToggleSlider)
-
-SliderBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        local function UpdateSlider()
-            local mousePos = UserInputService:GetMouseLocation()
-            local sliderPos = SliderBar.AbsolutePosition
-            local sliderSize = SliderBar.AbsoluteSize
-            local relativeX = math.clamp((mousePos.X - sliderPos.X) / sliderSize.X, 0, 1)
-            ArrowDistance = math.floor(relativeX * 150) + 20
-            SliderFill.Size = UDim2.new(ArrowDistance / 200, 0, 1, 0)
-            ArrowDistanceTitle.Text = "Arrow Distance: " .. ArrowDistance
-        end
-
-        UpdateSlider()
-
-        local connection
-        connection = UserInputService.InputChanged:Connect(function(changeInput)
-            if changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch then
-                UpdateSlider()
-            end
-        end)
-
-        UserInputService.InputEnded:Connect(function(endInput)
-            if endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch then
-                connection:Disconnect()
-            end
-        end)
-    end
-end)
-
---// Выдвижная кнопка Tracer
-local TracerToggle = Instance.new("TextButton")
-TracerToggle.Name = "TracerToggle"
-TracerToggle.Size = UDim2.new(1, -8, 0, 23)
-TracerToggle.BackgroundColor3 = Colors.Panel
-TracerToggle.BorderSizePixel = 0
-TracerToggle.LayoutOrder = 5
-TracerToggle.ZIndex = 3
-TracerToggle.Text = ""
-TracerToggle.AutoLocalize = false
-TracerToggle.Parent = MiscTabContent
-
-local TracerFrame = Instance.new("Frame")
-TracerFrame.Size = UDim2.new(1, -8, 0, 0)
-TracerFrame.BackgroundColor3 = Colors.Panel
-TracerFrame.BorderSizePixel = 0
-TracerFrame.LayoutOrder = 6
-TracerFrame.ZIndex = 3
-TracerFrame.ClipsDescendants = true
-TracerFrame.Parent = MiscTabContent
-
-local TracerContent = Instance.new("Frame")
-TracerContent.Size = UDim2.new(1, -16, 0, 27)
-TracerContent.Position = UDim2.new(0, 8, 0, 4)
-TracerContent.BackgroundColor3 = Colors.Panel
-TracerContent.BorderSizePixel = 0
-TracerContent.ZIndex = 4
-TracerContent.Parent = TracerFrame
-
-local TracerAccentBar = Instance.new("Frame")
-TracerAccentBar.Size = UDim2.new(0, 3, 1, 0)
-TracerAccentBar.BackgroundColor3 = Colors.Accent2
-TracerAccentBar.BorderSizePixel = 0
-TracerAccentBar.ZIndex = 5
-TracerAccentBar.Parent = TracerContent
-
-local TracerLabel = Instance.new("TextLabel")
-TracerLabel.Size = UDim2.new(1, -30, 1, 0)
-TracerLabel.Position = UDim2.new(0, 10, 0, 0)
-TracerLabel.BackgroundTransparency = 1
-TracerLabel.Font = Enum.Font.GothamBold
-TracerLabel.Text = "Tracer"
-TracerLabel.TextColor3 = Colors.Text
-TracerLabel.TextSize = 8
-TracerLabel.TextXAlignment = Enum.TextXAlignment.Left
-TracerLabel.ZIndex = 6
-TracerLabel.AutoLocalize = false
-TracerLabel.Parent = TracerContent
-
-local TracerCheckbox = Instance.new("Frame")
-TracerCheckbox.Size = UDim2.new(0, 13, 0, 13)
-TracerCheckbox.Position = UDim2.new(1, -20, 0.5, -6)
-TracerCheckbox.BackgroundColor3 = Colors.CheckboxOff
-TracerCheckbox.BorderSizePixel = 0
-TracerCheckbox.ZIndex = 7
-TracerCheckbox.Parent = TracerContent
-
-local TracerButton = Instance.new("TextButton")
-TracerButton.Size = UDim2.new(1, 0, 1, 0)
-TracerButton.BackgroundTransparency = 1
-TracerButton.Text = ""
-TracerButton.ZIndex = 8
-TracerButton.AutoLocalize = false
-TracerButton.Parent = TracerContent
-
-local isTracerOpen = false
-
-TracerToggle.MouseButton1Click:Connect(function()
-    isTracerOpen = not isTracerOpen
-    if isTracerOpen then
-        TweenService:Create(TracerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(1, -8, 0, 35)}):Play()
-    else
-        TweenService:Create(TracerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-            {Size = UDim2.new(1, -8, 0, 0)}):Play()
-    end
-end)
-
-TracerButton.MouseButton1Click:Connect(function()
-    ESPShowTracer = not ESPShowTracer
-    if ESPShowTracer then
-        TweenService:Create(TracerCheckbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOn}):Play()
-        TracerEnabled = true
-        TracerFunction(true)
-    else
-        TweenService:Create(TracerCheckbox, TweenInfo.new(0.2), {BackgroundColor3 = Colors.CheckboxOff}):Play()
-        RemoveAllTracers()
-    end
-end)
-
---// Создаем кнопки в Misc
-CreateFunctionInTab(MiscTabContent, "Arrows", "Arrows to players", 1, ArrowsFunction)
-CreateFunctionInTab(MiscTabContent, "Esp players", "Boxes with settings", 4, ESPFunction)
-
---// ================== SETTINGS ==================
---// Description Frame (оставляем как было)
-local DescriptionFrame = Instance.new("Frame")
-DescriptionFrame.Name = "DescriptionFrame"
-DescriptionFrame.Size = UDim2.new(1, -8, 0, 52)
-DescriptionFrame.BackgroundColor3 = Colors.Panel
-DescriptionFrame.BorderSizePixel = 0
-DescriptionFrame.LayoutOrder = 1
-DescriptionFrame.ZIndex = 3
-DescriptionFrame.Parent = SettingsTabContent
-
-local DescriptionAccent = Instance.new("Frame")
-DescriptionAccent.Size = UDim2.new(0, 3, 1, 0)
-DescriptionAccent.BackgroundColor3 = Colors.Accent2
-DescriptionAccent.BorderSizePixel = 0
-DescriptionAccent.ZIndex = 4
-DescriptionAccent.Parent = DescriptionFrame
-
-local DescriptionTitle = Instance.new("TextLabel")
-DescriptionTitle.Size = UDim2.new(1, -20, 0, 14)
-DescriptionTitle.Position = UDim2.new(0, 10, 0, 4)
-DescriptionTitle.BackgroundTransparency = 1
-DescriptionTitle.Font = Enum.Font.GothamBold
-DescriptionTitle.Text = "Description"
-DescriptionTitle.TextColor3 = Colors.Text
-DescriptionTitle.TextSize = 9
-DescriptionTitle.TextXAlignment = Enum.TextXAlignment.Left
-DescriptionTitle.ZIndex = 5
-DescriptionTitle.AutoLocalize = false
-DescriptionTitle.Parent = DescriptionFrame
-
-local DescriptionText = Instance.new("TextLabel")
-DescriptionText.Size = UDim2.new(1, -20, 0, 26)
-DescriptionText.Position = UDim2.new(0, 10, 0, 21)
-DescriptionText.BackgroundTransparency = 1
-DescriptionText.Font = Enum.Font.Gotham
-DescriptionText.Text = "This is a beta version and may contain bugs"
-DescriptionText.TextColor3 = Colors.TextSecondary
-DescriptionText.TextSize = 7
-DescriptionText.TextXAlignment = Enum.TextXAlignment.Left
-DescriptionText.TextWrapped = true
-DescriptionText.ZIndex = 5
-DescriptionText.AutoLocalize = false
-DescriptionText.Parent = DescriptionFrame
-
---// Новая выдвижная кнопка Telegram (белая, как у остальных)
-local TelegramToggle = Instance.new("TextButton")
-TelegramToggle.Name = "TelegramToggle"
-TelegramToggle.Size = UDim2.new(1, -8, 0, 23)
-TelegramToggle.BackgroundColor3 = Colors.Panel
-TelegramToggle.BorderSizePixel = 0
-TelegramToggle.LayoutOrder = 2
-TelegramToggle.ZIndex = 3
-TelegramToggle.Text = ""
-TelegramToggle.AutoLocalize = false
-TelegramToggle.Parent = SettingsTabContent
-
---// Раскрывающийся контейнер с Telegram
-local TelegramExpanded = Instance.new("Frame")
-TelegramExpanded.Name = "TelegramExpanded"
-TelegramExpanded.Size = UDim2.new(1, -8, 0, 0)
-TelegramExpanded.BackgroundColor3 = Colors.Panel
-TelegramExpanded.BorderSizePixel = 0
-TelegramExpanded.LayoutOrder = 3
-TelegramExpanded.ZIndex = 3
-TelegramExpanded.ClipsDescendants = true
-TelegramExpanded.Parent = SettingsTabContent
-
---// Кнопка Telegram внутри
-local TelegramButton = Instance.new("TextButton")
-TelegramButton.Name = "TelegramButton"
-TelegramButton.Size = UDim2.new(1, -16, 0, 27)
-TelegramButton.Position = UDim2.new(0, 8, 0, 4)
-TelegramButton.BackgroundColor3 = Colors.Panel
-TelegramButton.BorderSizePixel = 0
-TelegramButton.Font = Enum.Font.GothamBold
-TelegramButton.Text = "Telegram: @Nmap_011"
-TelegramButton.TextColor3 = Colors.Text
-TelegramButton.TextSize = 9
-TelegramButton.ZIndex = 4
-TelegramButton.AutoLocalize = false
-TelegramButton.Parent = TelegramExpanded
-
-local TelegramAccent = Instance.new("Frame")
-TelegramAccent.Size = UDim2.new(0, 3, 1, 0)
-TelegramAccent.BackgroundColor3 = Colors.Accent2
-TelegramAccent.BorderSizePixel = 0
-TelegramAccent.ZIndex = 5
-TelegramAccent.Parent = TelegramButton
-
-TelegramButton.MouseEnter:Connect(function()
-    TweenService:Create(TelegramButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(235, 235, 240)}):Play()
-end)
-TelegramButton.MouseLeave:Connect(function()
-    TweenService:Create(TelegramButton, TweenInfo.new(0.2), {BackgroundColor3 = Colors.Panel}):Play()
-end)
-
-TelegramButton.MouseButton1Click:Connect(function()
-    if setclipboard then setclipboard("https://t.me/Nmap_011") end
-    ShowNotification("Link copied")
-end)
-
---// Управление раскрытием Telegram
-local isTelegramOpen = false
-TelegramToggle.MouseButton1Click:Connect(function()
-    isTelegramOpen = not isTelegramOpen
-    if isTelegramOpen then
-        TweenService:Create(TelegramExpanded, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(1, -8, 0, 35)}):Play()
-    else
-        TweenService:Create(TelegramExpanded, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-            {Size = UDim2.new(1, -8, 0, 0)}):Play()
-    end
-end)
-
---// ================== КОНЕЦ SETTINGS ==================
-
---// Функция сворачивания и разворачивания меню
-local function HideMenu()
-    MainFrame.Visible = false
-    MinimizedButton.Visible = true
-end
-
-local function ShowMenu()
-    MainFrame.Visible = true
-    MinimizedButton.Visible = false
-end
-
---// Функция полного выключения и закрытия
-local function DestroyGUI()
-    RemoveAllArrows()
-    RemoveAllESP()
-    RemoveAllTracers()
-    ScreenGui:Destroy()
-end
-
---// Обработка ключа
-local function CheckKey()
-    if KeyInput.Text == "Nmap_key" then
-        KeyScreen.Visible = false
-        TabPanel.Visible = true
-        ContentContainer.Visible = true
-        SwitchTab("Misc")
-        ShowNotification("Welcome!")
-    else
-        ShowKeyError("Wrong key!")
-        KeyInput.Text = ""
-        ShowNotification("Wrong key!")
-    end
-end
-
-KeyButton.MouseButton1Click:Connect(CheckKey)
-KeyInput.FocusLost:Connect(function(enterPressed)
-    if enterPressed then CheckKey() end
-end)
-
---// Перетаскивание главного окна
-local dragging = false
-local dragStartPos = nil
-local frameStartPos = nil
-local dragConnection = nil
-
-local function StartDrag(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStartPos = input.Position
-        frameStartPos = MainFrame.Position
-        if dragConnection then dragConnection:Disconnect() end
-        dragConnection = UserInputService.InputChanged:Connect(function(changeInput)
-            if dragging and (changeInput.UserInputType == Enum.UserInputType.MouseMovement or changeInput.UserInputType == Enum.UserInputType.Touch) then
-                local delta = changeInput.Position - dragStartPos
-                MainFrame.Position = UDim2.new(frameStartPos.X.Scale, frameStartPos.X.Offset + delta.X,
-                                               frameStartPos.Y.Scale, frameStartPos.Y.Offset + delta.Y)
-            end
-        end)
-    end
-end
-
-local function EndDrag(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
-        if dragConnection then
-            dragConnection:Disconnect()
-            dragConnection = nil
-        end
-    end
-end
-
-TopBar.InputBegan:Connect(StartDrag)
-TopBar.InputEnded:Connect(EndDrag)
-
-CloseButton.MouseButton1Click:Connect(DestroyGUI)
-MinimizeButton.MouseButton1Click:Connect(HideMenu)
-MinimizedButton.MouseButton1Click:Connect(ShowMenu)
-
-UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Insert then
-        if MainFrame.Visible then
-            HideMenu()
-        else
-            ShowMenu()
-        end
-    end
-end)
-
---// Инициализация
-SwitchTab("Misc")
+_0x5CFF:Log(string.char(80,114,111,106,101,99,116,32,78,109,97,112,32,208,183,208,176,208,191,209,131,209,137,208,181,208,189,46), 3)
